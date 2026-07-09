@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const HeroContent = () => {
   return (
@@ -53,7 +54,11 @@ const HeroContent = () => {
         transition={{ delay: 0.5 }}
         className="flex flex-wrap gap-5 mt-9"
       >
-        <button className="group bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+        {/* Shop Now */}
+        <Link
+          to="/shop"
+          className="group bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        >
           <span className="flex items-center gap-2">
             Shop Now
 
@@ -61,11 +66,15 @@ const HeroContent = () => {
               →
             </span>
           </span>
-        </button>
+        </Link>
 
-        <button className="px-8 py-4 rounded-full border border-gray-300 bg-white text-base font-semibold text-gray-800 shadow-md hover:border-green-500 hover:text-green-600 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+        {/* Explore Collection */}
+        <Link
+          to="/shop?type=bestseller"
+          className="px-8 py-4 rounded-full border border-gray-300 bg-white text-base font-semibold text-gray-800 shadow-md hover:border-green-500 hover:text-green-600 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        >
           Explore Collection
-        </button>
+        </Link>
       </motion.div>
     </>
   );

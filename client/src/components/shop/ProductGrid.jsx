@@ -1,16 +1,37 @@
+import { useState, useEffect } from "react";
 import { productData } from "../../constants/productData";
 import ProductCard from "../common/ProductCard";
+import SkeletonCard from "../common/SkeletonCard";
 
 const ProductGrid = ({
   search = "",
   category = "All",
-  sort = "featured",
-  setSort,
+  type = null,
 }) => {
+  const [sort, setSort] = useState("featured");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Skeleton Loader
+  if (loading) {
+    return (
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+        {[1, 2, 3, 4, 5, 6].map((item) => (
+          <SkeletonCard key={item} />
+        ))}
+      </div>
+    );
+  }
 
   // Filter Products
   const filteredProducts = productData.filter((product) => {
-
     const matchesSearch = product.name
       .toLowerCase()
       .includes(search.toLowerCase());
@@ -19,7 +40,16 @@ const ProductGrid = ({
       category === "All" ||
       product.category === category;
 
-    return matchesSearch && matchesCategory;
+    const matchesType =
+      type === "bestseller"
+        ? product.bestSeller === true
+        : true;
+
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesType
+    );
   });
 
   // Sort Products
@@ -51,28 +81,22 @@ const ProductGrid = ({
       {/* Top Bar */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
 
-        <p className="text-gray-500 text-lg">
-          Showing
-          <span className="font-semibold text-gray-900 mx-2">
-            {sortedProducts.length}
-          </span>
-          Products
-        </p>
+        <div>
+          <h2 className="text-3xl font-bold">
+            {type === "bestseller"
+              ? "Best Selling Products"
+              : "All Products"}
+          </h2>
+
+          <p className="text-gray-500 mt-2">
+            Showing {sortedProducts.length} Products
+          </p>
+        </div>
 
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="
-            border
-            border-gray-300
-            rounded-full
-            px-6
-            py-3
-            outline-none
-            focus:border-green-500
-            bg-white
-            transition
-          "
+          className="border border-gray-300 rounded-full px-6 py-3 bg-white outline-none focus:border-green-500"
         >
           <option value="featured">Featured</option>
           <option value="newest">Newest</option>
@@ -101,12 +125,12 @@ const ProductGrid = ({
 
         <div className="bg-white rounded-3xl shadow-md py-24 text-center">
 
-          <h2 className="text-3xl font-bold text-gray-800">
+          <h2 className="text-3xl font-bold">
             No Products Found
           </h2>
 
           <p className="text-gray-500 mt-3">
-            Try searching with another keyword or category.
+            Try another filter.
           </p>
 
         </div>

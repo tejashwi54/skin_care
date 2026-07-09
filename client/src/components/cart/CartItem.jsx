@@ -1,52 +1,81 @@
-import { FaTrash } from "react-icons/fa";
+import {
+  FaPlus,
+  FaMinus,
+  FaTrash,
+} from "react-icons/fa";
 
-const CartItem = () => {
+import { useCart } from "../../context/CartContext";
+
+const CartItem = ({ item }) => {
+  const {
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+  } = useCart();
+
   return (
-    <div className="flex flex-col md:flex-row items-center gap-6 p-6 border-b">
+    <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b py-6">
 
-      {/* Product Image */}
-      <img
-        src="https://via.placeholder.com/120"
-        alt="Product"
-        className="w-28 h-28 rounded-2xl object-cover"
-      />
+      {/* Product */}
+      <div className="flex items-center gap-5 flex-1">
 
-      {/* Product Info */}
-      <div className="flex-1">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-28 h-28 object-cover rounded-2xl"
+        />
 
-        <p className="text-sm text-green-600 font-medium">
-          Serums
-        </p>
+        <div>
 
-        <h2 className="text-2xl font-bold mt-2">
-          Vitamin C Brightening Serum
-        </h2>
+          <h2 className="text-xl font-bold">
+            {item.name}
+          </h2>
 
-        <p className="text-green-600 font-semibold mt-3">
-          ₹999
-        </p>
+          <p className="text-green-600 mt-2">
+            {item.category}
+          </p>
+
+          <p className="mt-3 font-semibold text-2xl text-green-600">
+            ₹{item.price}
+          </p>
+
+        </div>
 
       </div>
 
       {/* Quantity */}
-      <div className="flex items-center border rounded-full overflow-hidden">
+      <div className="flex items-center gap-3">
 
-        <button className="px-4 py-2 hover:bg-gray-100">
-          −
+        <button
+          onClick={() => decreaseQuantity(item.id)}
+          className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200"
+        >
+          <FaMinus className="mx-auto" />
         </button>
 
-        <span className="px-6 font-semibold">
-          1
+        <span className="text-xl font-bold w-8 text-center">
+          {item.quantity}
         </span>
 
-        <button className="px-4 py-2 hover:bg-gray-100">
-          +
+        <button
+          onClick={() => increaseQuantity(item.id)}
+          className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200"
+        >
+          <FaPlus className="mx-auto" />
         </button>
 
       </div>
 
+      {/* Total */}
+      <div className="text-2xl font-bold text-green-600">
+        ₹{item.price * item.quantity}
+      </div>
+
       {/* Remove */}
-      <button className="text-red-500 hover:text-red-600 text-xl">
+      <button
+        onClick={() => removeFromCart(item.id)}
+        className="text-red-500 hover:text-red-700 text-xl"
+      >
         <FaTrash />
       </button>
 

@@ -1,6 +1,20 @@
 import { Link } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 const OrderSummary = () => {
+  const { cartItems } = useCart();
+
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  const shipping = subtotal > 999 || subtotal === 0 ? 0 : 99;
+
+  const discount = subtotal >= 2000 ? 200 : 0;
+
+  const total = subtotal + shipping - discount;
+
   return (
     <div className="bg-white rounded-[32px] shadow-sm p-8 sticky top-28">
 
@@ -12,26 +26,27 @@ const OrderSummary = () => {
 
         <div className="flex justify-between text-gray-600">
           <span>Subtotal</span>
-          <span>₹2,597</span>
+          <span>₹{subtotal}</span>
         </div>
 
         <div className="flex justify-between text-gray-600">
           <span>Shipping</span>
+
           <span className="text-green-600 font-medium">
-            Free
+            {shipping === 0 ? "Free" : `₹${shipping}`}
           </span>
         </div>
 
         <div className="flex justify-between text-gray-600">
           <span>Discount</span>
-          <span>- ₹200</span>
+          <span>- ₹{discount}</span>
         </div>
 
         <hr />
 
         <div className="flex justify-between text-2xl font-bold">
           <span>Total</span>
-          <span>₹2,397</span>
+          <span>₹{total}</span>
         </div>
 
       </div>
@@ -71,9 +86,16 @@ const OrderSummary = () => {
           Continue Shopping
         </Link>
 
-        <button className="w-full bg-black hover:bg-gray-900 text-white py-4 rounded-full font-semibold transition">
+        <Link
+          to="/checkout"
+          className={`block w-full text-center py-4 rounded-full font-semibold transition ${
+            cartItems.length === 0
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none"
+              : "bg-black hover:bg-gray-900 text-white"
+          }`}
+        >
           Proceed To Checkout
-        </button>
+        </Link>
 
       </div>
 

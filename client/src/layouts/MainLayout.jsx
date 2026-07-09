@@ -1,5 +1,6 @@
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
+import ScrollToTopButton from "../components/common/ScrollToTopButton";
 
 const MainLayout = ({ children }) => {
   return (
@@ -9,6 +10,7 @@ const MainLayout = ({ children }) => {
       <main>{children}</main>
 
       <Footer />
+      <ScrollToTopButton />
     </div>
   );
 };

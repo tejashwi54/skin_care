@@ -1,3 +1,5 @@
+
+import { useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaShoppingBag,
@@ -6,43 +8,77 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
-const DashboardSidebar = () => {
-  return (
-    <div className="bg-white rounded-[32px] shadow-sm p-8">
+const DashboardSidebar = ({ activeTab, setActiveTab }) => {
+  const navigate = useNavigate();
 
-      <h2 className="text-3xl font-bold">
+  const menuItems = [
+    {
+      id: "profile",
+      label: "Profile",
+      icon: <FaUser />,
+    },
+    {
+      id: "orders",
+      label: "Orders",
+      icon: <FaShoppingBag />,
+    },
+    {
+      id: "wishlist",
+      label: "Wishlist",
+      icon: <FaHeart />,
+    },
+    {
+      id: "address",
+      label: "Addresses",
+      icon: <FaMapMarkerAlt />,
+    },
+  ];
+
+  const handleClick = (id) => {
+  console.log("Clicked:", id);
+
+  if (id === "wishlist") {
+    navigate("/wishlist");
+  } else {
+    setActiveTab(id);
+  }
+};
+
+  return (
+    <div className="bg-white rounded-3xl shadow-md p-8 sticky top-28">
+
+      <h2 className="text-3xl font-bold mb-8">
         My Account
       </h2>
 
-      <div className="mt-10 space-y-4">
+      <div className="space-y-3">
 
-        <button className="w-full text-left p-4 rounded-xl bg-green-500 text-white flex items-center gap-3">
-          <FaUser />
-          Profile
-        </button>
+        {menuItems.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => handleClick(item.id)}
+            className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-300 cursor-pointer ${
+              activeTab === item.id
+                ? "bg-green-500 text-white"
+                : "hover:bg-gray-100 text-gray-700"
+            }`}
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </button>
+        ))}
 
-        <button className="w-full text-left p-4 rounded-xl hover:bg-gray-100 flex items-center gap-3">
-          <FaShoppingBag />
-          Orders
-        </button>
-
-        <button className="w-full text-left p-4 rounded-xl hover:bg-gray-100 flex items-center gap-3">
-          <FaHeart />
-          Wishlist
-        </button>
-
-        <button className="w-full text-left p-4 rounded-xl hover:bg-gray-100 flex items-center gap-3">
-          <FaMapMarkerAlt />
-          Addresses
-        </button>
-
-        <button className="w-full text-left p-4 rounded-xl hover:bg-red-50 text-red-500 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => navigate("/login")}
+          className="w-full flex items-center gap-3 p-4 rounded-xl text-red-500 hover:bg-red-50 transition-all cursor-pointer"
+        >
           <FaSignOutAlt />
           Logout
         </button>
 
       </div>
-
     </div>
   );
 };
