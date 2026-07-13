@@ -4,44 +4,19 @@ const router = express.Router();
 
 const productController = require("../controllers/product.controller");
 
-const { protect } = require("../middlewares/auth.middleware");
-const authorize = require("../middlewares/role.middleware");
+// Create Product
+router.post("/", productController.createProduct);
 
-const validate = require("../middlewares/validate.middleware");
-
-const {
-  productValidator,
-} = require("../validators/product.validator");
-
-// Public Routes
+// Get All Products
 router.get("/", productController.getAllProducts);
 
+// Get Single Product
 router.get("/:id", productController.getProductById);
 
-// Admin Routes
-router.post(
-  "/",
-  protect,
-  authorize("admin"),
-  productValidator,
-  validate,
-  productController.createProduct
-);
+// Update Product
+router.put("/:id", productController.updateProduct);
 
-router.put(
-  "/:id",
-  protect,
-  authorize("admin"),
-  productValidator,
-  validate,
-  productController.updateProduct
-);
-
-router.delete(
-  "/:id",
-  protect,
-  authorize("admin"),
-  productController.deleteProduct
-);
+// Delete Product
+router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;

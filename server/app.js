@@ -10,6 +10,7 @@ const errorHandler = require("./middlewares/error.middleware");
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
 
+
 const app = express();
 
 // Security Middleware

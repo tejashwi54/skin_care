@@ -1,65 +1,90 @@
 const ApiError = require("../utils/ApiError");
 const productRepository = require("../repositories/product.repository");
 
-const getProducts = async (query) => {
+// Create Product
+const createProduct = async (data) => {
+  return await productRepository.createProduct(data);
+};
 
-  const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || 10;
+// Get All Products with Search, Filter, Pagination & Sorting
+const getAllProducts = async (query) => {
+  const filter = {};
 
-  const skip = (page - 1) * limit;
-
-  const filter = {
-    isActive: true,
-  };
-
-  if (query.category) {
-    filter.category = query.category;
+  // Search by Name, Category, Description
+  if (query.search) {
+    filter.$or = [
+      {
+        name: {
+          $regex: query.search,
+          $options: "i",
+        },
+      },
+      {
+        category: {
+          $regex: query.search,
+          $options: "i",
+        },
+      },
+      {
+        description: {
+          $regex: query.search,
+          $options: "i",
+        },
+      },
+    ];
   }
 
-  if (query.search) {
-    filter.name = {
-      $regex: query.search,
+  // Category Filter
+  if (query.category) {
+    filter.category = {
+      $regex: query.category,
       $options: "i",
     };
   }
 
-  let sort = {
-    createdAt: -1,
-  };
+  // Price Filter
+  if (query.minPrice || query.maxPrice) {
+    filter.price = {};
 
-  if (query.sort === "low") {
-    sort = { price: 1 };
+    if (query.minPrice) {
+      filter.price.$gte = Number(query.minPrice);
+    }
+
+    if (query.maxPrice) {
+      filter.price.$lte = Number(query.maxPrice);
+    }
   }
 
-  if (query.sort === "high") {
-    sort = { price: -1 };
-  }
+  // Pagination
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 8;
+  const skip = (page - 1) * limit;
 
-  if (query.sort === "rating") {
-    sort = { rating: -1 };
-  }
+  // Sorting
+  const sort = query.sort || "-createdAt";
 
-  const products =
-    await productRepository.getProducts(filter, {
-      sort,
-      skip,
-      limit,
-    });
+  // Fetch Products
+  const products = await productRepository.getProducts(filter, {
+    sort,
+    skip,
+    limit,
+  });
 
-  const total =
-    await productRepository.getProductsCount(filter);
+  // Count Total Products
+  const totalProducts = await productRepository.countProducts(filter);
 
   return {
     products,
-    page,
-    totalPages: Math.ceil(total / limit),
-    totalProducts: total,
+    currentPage: page,
+    totalPages: Math.ceil(totalProducts / limit),
+    totalProducts,
+    limit,
   };
 };
 
-const getProduct = async (id) => {
-  const product =
-    await productRepository.getProductById(id);
+// Get Single Product
+const getProductById = async (id) => {
+  const product = await productRepository.getProductById(id);
 
   if (!product) {
     throw new ApiError(404, "Product not found");
@@ -68,10 +93,7 @@ const getProduct = async (id) => {
   return product;
 };
 
-const createProduct = async (data) => {
-  return productRepository.createProduct(data);
-};
-
+// Update Product
 const updateProduct = async (id, data) => {
   const product = await productRepository.updateProduct(id, data);
 
@@ -82,6 +104,7 @@ const updateProduct = async (id, data) => {
   return product;
 };
 
+// Delete Product
 const deleteProduct = async (id) => {
   const product = await productRepository.deleteProduct(id);
 
@@ -94,8 +117,8 @@ const deleteProduct = async (id) => {
 
 module.exports = {
   createProduct,
-  getProducts,
-  getProduct,
+  getAllProducts,
+  getProductById,
   updateProduct,
   deleteProduct,
 };

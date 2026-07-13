@@ -2,21 +2,30 @@ const Product = require("../models/Product");
 
 const createProduct = (data) => Product.create(data);
 
-const getProducts = (filter, options) => {
+const getProducts = (filter, options = {}) => {
+  const {
+    sort = "-createdAt",
+    skip = 0,
+    limit = 10,
+  } = options;
+
   return Product.find(filter)
-    .sort(options.sort)
-    .skip(options.skip)
-    .limit(options.limit);
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
 };
 
-const getProductsCount = (filter) => {
-  return Product.countDocuments(filter);
-};
+const countProducts = (filter) =>
+  Product.countDocuments(filter);
 
-const getProductById = (id) => Product.findById(id);
+const getProductById = (id) =>
+  Product.findById(id);
 
 const updateProduct = (id, data) =>
-  Product.findByIdAndUpdate(id, data, { new: true });
+  Product.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  });
 
 const deleteProduct = (id) =>
   Product.findByIdAndDelete(id);
@@ -24,7 +33,7 @@ const deleteProduct = (id) =>
 module.exports = {
   createProduct,
   getProducts,
-  getProductsCount,
+  countProducts,
   getProductById,
   updateProduct,
   deleteProduct,

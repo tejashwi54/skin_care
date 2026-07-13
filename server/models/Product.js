@@ -18,20 +18,9 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
 
-    brand: {
-      type: String,
-      default: "Clear Skin",
-    },
-
     price: {
       type: Number,
       required: true,
-      min: 0,
-    },
-
-    discountPrice: {
-      type: Number,
-      default: 0,
     },
 
     stock: {
@@ -41,7 +30,8 @@ const productSchema = new mongoose.Schema(
 
     images: [
       {
-        type: String,
+        url: String,
+        public_id: String,
       },
     ],
 
@@ -50,24 +40,19 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
 
-    totalReviews: {
+    numReviews: {
       type: Number,
       default: 0,
     },
 
-    isFeatured: {
+    featured: {
       type: Boolean,
       default: false,
     },
 
-    isBestSeller: {
-      type: Boolean,
-      default: false,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: true,
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {
