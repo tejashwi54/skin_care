@@ -1,115 +1,185 @@
 # 🌿 Clear Skin - MERN Stack E-commerce Website
 
-A modern and responsive skincare e-commerce website built using the **MERN Stack**. This project is being developed as part of an internship assignment with a strong focus on **UI/UX, security, performance, and clean code architecture**.
+A modern and responsive **MERN Stack E-commerce Website** for skincare products. The application provides a complete online shopping experience with secure authentication, product browsing, wishlist, shopping cart, checkout, order management, and user dashboard.
+
+This project was developed as part of an internship with a focus on **clean architecture, responsive UI, security, and user experience**.
 
 ---
 
-## 🚀 Tech Stack
+# 🚀 Tech Stack
 
-### Frontend
+## Frontend
 - React.js (Vite)
 - React Router DOM
 - Tailwind CSS
 - Axios
-- React Hook Form
+- Context API
 - Framer Motion
 - React Hot Toast
 - React Icons
 
-### Backend
+## Backend
 - Node.js
 - Express.js
 - MongoDB Atlas
 - Mongoose
 - JWT Authentication
 - bcryptjs
-- Cookie Parser
 - Express Validator
-- Express Rate Limit
+- Helmet
+- Morgan
+- Cookie Parser
+- CORS
 
 ---
 
-## ✨ Features
+# ✨ Features
 
-### Authentication
+## Authentication
 - User Registration
 - User Login
 - JWT Authentication
-- Password Encryption (bcrypt)
-- Secure httpOnly Cookies
-- Logout Functionality
-- Current User API
-- Input Validation
-- Rate Limiting
-- Role-Based Access Control (RBAC)
+- Password Encryption using bcrypt
 - Protected Routes
-- Prevention of Admin Self-Registration
-
-### UI (In Progress)
-- Premium Landing Page
-- Responsive Design
-- Product Listing
-- Product Details
-- Shopping Cart
-- Checkout
-- User Dashboard
-- Admin Dashboard
+- Logout
+- Role-Based Authentication
+- Input Validation
 
 ---
 
-## 📂 Project Structure
+## Home Page
 
-```
+- Premium Responsive Landing Page
+- Hero Banner
+- Featured Products
+- Categories
+- Best Sellers
+- New Arrivals
+- Testimonials
+- Newsletter Section
+
+---
+
+## Product Module
+
+- Product Listing
+- Product Details
+- Category Filtering
+- Responsive Product Cards
+
+---
+
+## Shopping Cart
+
+- Add to Cart
+- Remove from Cart
+- Increase Quantity
+- Decrease Quantity
+- Dynamic Order Summary
+- Shipping & Discount Calculation
+
+---
+
+## Wishlist
+
+- Add to Wishlist
+- Remove from Wishlist
+- Move Product to Cart
+- Dynamic Wishlist
+
+---
+
+## Checkout
+
+- Billing Details Form
+- Payment Method Selection
+- Order Summary
+- Place Order
+- Order Success Page
+
+---
+
+## Orders
+
+- Place Order
+- My Orders
+- View Order Details
+- Cancel Order
+
+---
+
+## Dashboard
+
+- User Profile
+- Welcome Message with Logged-in User
+- My Orders
+- Logout
+
+---
+
+# 🔐 Security Features
+
+- JWT Authentication
+- Password Hashing (bcrypt)
+- Input Validation
+- Protected APIs
+- Environment Variables
+- Helmet Security
+- CORS Protection
+- Centralized Error Handling
+
+---
+
+# 📂 Project Structure
+
+```text
 Clear_skin/
 │
 ├── client/
 │   ├── src/
-│   ├── public/
-│   ├── package.json
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── App.jsx
+│   │
+│   └── package.json
 │
 ├── server/
 │   ├── config/
 │   ├── constants/
 │   ├── controllers/
-│   ├── middleware/
+│   ├── helpers/
+│   ├── middlewares/
 │   ├── models/
+│   ├── repositories/
 │   ├── routes/
+│   ├── services/
 │   ├── utils/
 │   ├── validators/
-│   ├── .env.example
-│   ├── package.json
+│   ├── app.js
+│   ├── server.js
+│   └── package.json
 │
-├── doc/
-│
-├── .gitignore
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## 🔐 Environment Variables
+# ⚙️ Installation
 
-Create a `.env` file inside the **server** folder.
-
-```
-PORT=5000
-
-MONGO_URI=your_mongodb_connection_string
-
-JWT_SECRET=your_secret_key
-```
-
----
-
-## ⚙️ Installation
-
-### Clone Repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/tejashwi54/skin_care.git
 ```
 
-### Install Frontend
+---
+
+## Install Frontend
 
 ```bash
 cd client
@@ -117,7 +187,9 @@ npm install
 npm run dev
 ```
 
-### Install Backend
+---
+
+## Install Backend
 
 ```bash
 cd server
@@ -127,60 +199,96 @@ npm run dev
 
 ---
 
-## 📅 Development Timeline
+# 🔐 Environment Variables
 
-### ✅ Day 1
-- Requirement Analysis
-- Project Setup
-- MongoDB Atlas Configuration
-- Authentication Module
-- JWT Authentication
-- Password Hashing
-- Secure Cookies
-- Validation
-- Rate Limiting
+Create a `.env` file inside the **server** directory.
 
-### 🔄 Upcoming
-- Homepage UI
-- Authentication UI
-- Product Module
-- Cart & Checkout
-- User Dashboard
+```env
+PORT=5000
+
+MONGO_URI=YOUR_MONGODB_URI
+
+JWT_SECRET=YOUR_SECRET_KEY
+
+CLIENT_URL=http://localhost:5173
+```
+
+---
+
+# 📸 Application Modules
+
+- Home
+- Shop
+- Product Details
+- Wishlist
+- Shopping Cart
+- Checkout
+- Order Success
+- Login
+- Register
+- Dashboard
+- My Orders
+- Contact
+- About
+
+---
+
+# 🛠 API Modules
+
+### Authentication
+
+- Register User
+- Login User
+- Logout User
+- Get Current User
+
+### Products
+
+- Get All Products
+- Get Product By ID
+
+### Orders
+
+- Place Order
+- Get My Orders
+- Get Order By ID
+- Cancel Order
+- Get All Orders (Admin)
+- Update Order Status
+
+---
+
+# 📈 Future Improvements
+
 - Admin Dashboard
-- Testing
-- Deployment
+- Razorpay / Stripe Payment Gateway
+- Product Reviews & Ratings
+- Forgot Password
+- Email Verification
+- Cloudinary Image Upload
+- Inventory Management
+- Product Search & Filters
+- Order Tracking
 
 ---
 
-## 🛡️ Security Features
+# 📌 Project Status
 
-- Password Hashing using bcrypt
-- JWT Authentication
-- httpOnly Cookies
-- Rate Limiting
-- Input Validation
-- Centralized Error Handling
-- Secure Environment Variables
-- Prevention of Admin Privilege Escalation
+✅ **Completed**
+
+The project includes a complete MERN-based e-commerce workflow with authentication, shopping cart, wishlist, checkout, order management, and responsive user interface.
 
 ---
 
-## 📌 Project Status
-
-🚧 **Currently Under Development**
-
-Authentication module is completed. UI development and remaining e-commerce features are in progress.
-
----
-
-## 👨‍💻 Developer
+# 👨‍💻 Developer
 
 **Tejashwi Bharti**
 
-GitHub: https://github.com/tejashwi54
+GitHub:
+https://github.com/tejashwi54
 
 ---
 
-## 📄 License
+# 📄 License
 
-This project is developed for learning and internship purposes.
+This project was developed for educational and internship purposes.
