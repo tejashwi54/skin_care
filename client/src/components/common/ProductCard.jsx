@@ -13,22 +13,51 @@ const ProductCard = ({ product }) => {
 
   const [openQuickView, setOpenQuickView] = useState(false);
 
-  const liked = isInWishlist(product.id);
+  // Normalize Backend Data
+  const productId = product._id || product.id;
+
+  const productImage =
+    product.image ||
+    product.images?.[0]?.url ||
+    "/images/placeholder.jpg";
+
+  const productBadge =
+    product.badge ||
+    (product.featured ? "Featured" : "New");
+
+  const productRating = product.rating || 0;
+
+  const productReviews =
+    product.reviews || product.numReviews || 0;
+
+  const productOldPrice =
+    product.oldPrice || product.price;
+
+  const productStock =
+    product.stock > 0
+      ? "In Stock"
+      : "Out of Stock";
+
+  const liked = isInWishlist(productId);
 
   const handleAddToCart = () => {
     addToCart(product);
     toast.success(`${product.name} added to cart 🛒`);
   };
 
-  const handleWishlist = () => {
-    if (liked) {
-      toggleWishlist(product);
-      toast("Removed from Wishlist");
-    } else {
-      toggleWishlist(product);
-      toast.success("Added to Wishlist ❤️");
-    }
-  };
+const handleWishlist = () => {
+  toggleWishlist(product);
+
+  if (liked) {
+    toast("Removed from Wishlist");
+  } else {
+    toast.success("Added to Wishlist ❤️");
+  }
+};
+
+console.log("Product:", product);
+console.log("Product Image:", productImage);
+
 
   return (
     <>
@@ -39,7 +68,7 @@ const ProductCard = ({ product }) => {
 
           {/* Badge */}
           <span className="absolute top-4 left-4 z-20 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-            {product.badge}
+            {productBadge}
           </span>
 
           {/* Wishlist */}
@@ -65,9 +94,9 @@ const ProductCard = ({ product }) => {
           </button>
 
           {/* Product Link */}
-          <Link to={`/product/${product.id}`}>
+          <Link to={`/product/${productId}`}>
             <img
-              src={product.image}
+              src={productImage}
               alt={product.name}
               className="w-full h-72 object-cover group-hover:scale-110 transition duration-500"
             />
@@ -77,7 +106,7 @@ const ProductCard = ({ product }) => {
 
         {/* Content */}
         <Link
-          to={`/product/${product.id}`}
+          to={`/product/${productId}`}
           className="flex-1 flex flex-col"
         >
           <div className="p-6 flex flex-col flex-1">
@@ -92,9 +121,9 @@ const ProductCard = ({ product }) => {
 
             <div className="mt-3 flex items-center gap-2">
               <FaStar className="text-yellow-400" />
-              <span>{product.rating}</span>
+              <span>{productRating}</span>
               <span className="text-gray-400">
-                ({product.reviews})
+                ({productReviews})
               </span>
             </div>
 
@@ -105,13 +134,13 @@ const ProductCard = ({ product }) => {
               </span>
 
               <span className="line-through text-gray-400">
-                ₹{product.oldPrice}
+                ₹{productOldPrice}
               </span>
 
             </div>
 
             <p className="mt-3 text-sm text-green-600">
-              {product.stock}
+              {productStock}
             </p>
 
           </div>

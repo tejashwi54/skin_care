@@ -9,22 +9,34 @@ const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState(() => {
-    const saved = localStorage.getItem("wishlist");
+    const user = JSON.parse(localStorage.getItem("user"));
+
+const wishlistKey = user
+  ? `wishlist_${user._id}`
+  : "wishlist_guest";
+
+const saved = localStorage.getItem(wishlistKey);
     return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem(
-      "wishlist",
-      JSON.stringify(wishlistItems)
-    );
+    const user = JSON.parse(localStorage.getItem("user"));
+
+const wishlistKey = user
+  ? `wishlist_${user._id}`
+  : "wishlist_guest";
+
+localStorage.setItem(
+  wishlistKey,
+  JSON.stringify(wishlistItems)
+);
   }, [wishlistItems]);
 
   // Add Product
   const addToWishlist = (product) => {
     setWishlistItems((prev) => {
       const exists = prev.some(
-        (item) => item.id === product.id
+        (item) => item._id === product._id
       );
 
       if (exists) return prev;
@@ -36,7 +48,7 @@ export const WishlistProvider = ({ children }) => {
   // Remove Product
   const removeFromWishlist = (id) => {
     setWishlistItems((prev) =>
-      prev.filter((item) => item.id !== id)
+      prev.filter((item) => item._id !== id)
     );
   };
 
@@ -44,12 +56,12 @@ export const WishlistProvider = ({ children }) => {
   const toggleWishlist = (product) => {
     setWishlistItems((prev) => {
       const exists = prev.some(
-        (item) => item.id === product.id
+        (item) => item._id === product._id
       );
 
       if (exists) {
         return prev.filter(
-          (item) => item.id !== product.id
+          (item) => item._id !== product._id
         );
       }
 
@@ -60,7 +72,7 @@ export const WishlistProvider = ({ children }) => {
   // Check Wishlist
   const isInWishlist = (id) => {
     return wishlistItems.some(
-      (item) => item.id === id
+      (item) => item._id === id
     );
   };
 

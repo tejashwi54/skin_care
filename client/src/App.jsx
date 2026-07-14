@@ -12,26 +12,96 @@ import Dashboard from "./pages/Dashboard";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import OrderSuccess from "./pages/OrderSuccess";
+
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import MyOrders from "./pages/MyOrders";
 
 function App() {
   return (
-    
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Home />} />
+
+      <Route path="/shop" element={<Shop />} />
+
+      <Route
+        path="/product/:id"
+        element={<ProductDetails />}
+      />
+
+      <Route path="/contact" element={<Contact />} />
+
+      <Route path="/about" element={<About />} />
+
+      <Route path="/login" element={<Login />} />
+
+      <Route
+        path="/register"
+        element={<Register />}
+      />
+
+      {/* Protected Routes */}
+
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/wishlist"
+        element={
+          <ProtectedRoute>
+            <Wishlist />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/order-success"
+        element={
+          <ProtectedRoute>
+            <OrderSuccess />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* 404 */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
     
   );
 }
+
+<Route
+  path="/my-orders"
+  element={
+    <ProtectedRoute>
+      <MyOrders />
+    </ProtectedRoute>
+  }
+/>
 
 export default App;

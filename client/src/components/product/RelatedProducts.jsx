@@ -1,12 +1,49 @@
-import { productData } from "../../constants/productData";
+import { useEffect, useState } from "react";
+import { getAllProducts } from "../../api/productApi";
 import ProductCard from "../common/ProductCard";
 
 const RelatedProducts = ({ currentProduct }) => {
-  // Show all products except the current one
-  const relatedProducts = productData
-    .filter((product) => product.id !== currentProduct.id)
-    .slice(0, 4);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
+  useEffect(() => {
+    fetchRelatedProducts();
+  }, [currentProduct]);
+
+  const fetchRelatedProducts = async () => {
+  try {
+    const response = await getAllProducts();
+
+    const products = response.data.products;
+
+    // Same Category Products
+    let related = products.filter(
+      (product) =>
+        product._id !== currentProduct._id &&
+        product.category === currentProduct.category
+    );
+
+    // If less than 4, fill with other products
+    if (related.length < 4) {
+      const remainingProducts = products.filter(
+        (product) =>
+          product._id !== currentProduct._id &&
+          !related.some((item) => item._id === product._id)
+      );
+
+      related = [
+        ...related,
+        ...remainingProducts,
+      ].slice(0, 4);
+    }
+
+    setRelatedProducts(related);
+  } catch (error) {
+    console.error(
+      "Error fetching related products:",
+      error
+    );
+  }
+};
   return (
     <section className="mt-28">
 
@@ -28,17 +65,22 @@ const RelatedProducts = ({ currentProduct }) => {
 
       </div>
 
-      {/* Product Grid */}
-      <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
+      {relatedProducts.length > 0 ? (
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
 
-        {relatedProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
+          {relatedProducts.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+            />
+          ))}
 
-      </div>
+        </div>
+      ) : (
+        <div className="text-center text-gray-500 py-10">
+          No Related Products Found
+        </div>
+      )}
 
     </section>
   );

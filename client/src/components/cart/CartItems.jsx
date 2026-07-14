@@ -13,7 +13,7 @@ const CartItems = () => {
     <div className="bg-white rounded-[32px] shadow-sm p-6">
       {cartItems.map((item) => (
         <CartItem
-          key={item.id}
+          key={item._id}
           item={item}
         />
       ))}

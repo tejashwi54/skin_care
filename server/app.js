@@ -9,32 +9,46 @@ const errorHandler = require("./middlewares/error.middleware");
 // Routes
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
-
+const orderRoutes = require("./routes/order.routes");
 
 const app = express();
 
+// ==============================
 // Security Middleware
+// ==============================
 app.use(helmet());
 
+// ==============================
 // Logging
+// ==============================
 app.use(morgan("dev"));
 
-// Body Parsers
+// ==============================
+// Body Parser
+// ==============================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Cookies
+// ==============================
+// Cookie Parser
+// ==============================
 app.use(cookieParser());
 
+// ==============================
 // CORS
+// ==============================
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin:
+      process.env.CLIENT_URL ||
+      "http://localhost:5173",
     credentials: true,
   })
 );
 
+// ==============================
 // Health Check
+// ==============================
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
@@ -42,11 +56,16 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// ==============================
 // API Routes
+// ==============================
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
-// 404 Handler
+// ==============================
+// 404 Route
+// ==============================
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -54,7 +73,9 @@ app.use((req, res) => {
   });
 });
 
+// ==============================
 // Global Error Handler
+// ==============================
 app.use(errorHandler);
 
 module.exports = app;

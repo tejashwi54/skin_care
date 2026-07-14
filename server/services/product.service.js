@@ -6,8 +6,8 @@ const createProduct = async (data) => {
   return await productRepository.createProduct(data);
 };
 
-// Get All Products with Search, Filter, Pagination & Sorting
-const getAllProducts = async (query) => {
+// Get All Products (Search + Filter + Pagination + Sorting)
+const getAllProducts = async (query = {}) => {
   const filter = {};
 
   // Search by Name, Category, Description
@@ -70,7 +70,7 @@ const getAllProducts = async (query) => {
     limit,
   });
 
-  // Count Total Products
+  // Total Products Count
   const totalProducts = await productRepository.countProducts(filter);
 
   return {

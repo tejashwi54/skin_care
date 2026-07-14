@@ -13,7 +13,7 @@ import { useCart } from "../../context/CartContext";
 import SearchModal from "../common/SearchModal";
 
 const Navbar = () => {
-  const { cartItems } = useCart();
+  const { totalItems } = useCart();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -26,13 +26,17 @@ const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () =>
+      window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
-    { name: "Best Sellers", path: "/shop?type=bestseller" },
+    {
+      name: "Best Sellers",
+      path: "/shop?type=bestseller",
+    },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
@@ -101,9 +105,9 @@ const Navbar = () => {
             >
               <FiShoppingCart size={24} />
 
-              {cartItems.length > 0 && (
+              {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-green-500 text-white text-[10px] flex items-center justify-center font-bold">
-                  {cartItems.length}
+                  {totalItems}
                 </span>
               )}
             </Link>
@@ -151,6 +155,7 @@ const Navbar = () => {
 
               <div className="flex items-center gap-6 pt-4">
 
+                {/* Search */}
                 <button
                   onClick={() => {
                     setSearchOpen(true);
@@ -160,6 +165,7 @@ const Navbar = () => {
                   <FiSearch size={22} />
                 </button>
 
+                {/* Wishlist */}
                 <Link
                   to="/wishlist"
                   onClick={() => setMenuOpen(false)}
@@ -167,6 +173,7 @@ const Navbar = () => {
                   <FiHeart size={22} />
                 </Link>
 
+                {/* Cart */}
                 <Link
                   to="/cart"
                   onClick={() => setMenuOpen(false)}
@@ -174,19 +181,20 @@ const Navbar = () => {
                 >
                   <FiShoppingCart size={22} />
 
-                  {cartItems.length > 0 && (
+                  {totalItems > 0 && (
                     <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-green-500 text-white text-[10px] flex items-center justify-center font-bold">
-                      {cartItems.length}
+                      {totalItems}
                     </span>
                   )}
                 </Link>
 
+                {/* Dashboard */}
                 <Link
-                  to="/dashboard"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <FiUser size={22} />
-                </Link>
+  to="/dashboard"
+  className="hover:text-green-600 transition"
+>
+  <FiUser size={24} />
+</Link>
 
               </div>
 

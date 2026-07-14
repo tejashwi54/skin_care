@@ -47,8 +47,8 @@ const CartItem = ({ item }) => {
       <div className="flex items-center gap-3">
 
         <button
-          onClick={() => decreaseQuantity(item.id)}
-          className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200"
+          onClick={() => decreaseQuantity(item._id)}
+          className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition"
         >
           <FaMinus className="mx-auto" />
         </button>
@@ -58,26 +58,29 @@ const CartItem = ({ item }) => {
         </span>
 
         <button
-          onClick={() => increaseQuantity(item.id)}
-          className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200"
+          onClick={() => increaseQuantity(item._id)}
+          className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition"
         >
           <FaPlus className="mx-auto" />
         </button>
 
       </div>
 
-      {/* Total */}
+      {/* Item Total */}
       <div className="text-2xl font-bold text-green-600">
         ₹{item.price * item.quantity}
       </div>
 
       {/* Remove */}
       <button
-        onClick={() => removeFromCart(item.id)}
-        className="text-red-500 hover:text-red-700 text-xl"
-      >
-        <FaTrash />
-      </button>
+  onClick={() => {
+    console.log("Deleting:", item._id, item.name);
+    removeFromCart(item._id);
+  }}
+  className="text-red-500 hover:text-red-700 text-xl transition"
+>
+  <FaTrash />
+</button>
 
     </div>
   );

@@ -17,18 +17,18 @@ const createProduct = asyncHandler(async (req, res) => {
 
 // Get All Products
 const getAllProducts = asyncHandler(async (req, res) => {
-  const products = await productService.getAllProducts();
+  const result = await productService.getAllProducts(req.query);
 
   res.status(200).json(
     new ApiResponse(
       200,
       "Products fetched successfully",
-      products
+      result
     )
   );
 });
 
-// Get Single Product
+// Get Product By ID
 const getProductById = asyncHandler(async (req, res) => {
   const product = await productService.getProductById(
     req.params.id
@@ -66,7 +66,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
   res.status(200).json(
     new ApiResponse(
       200,
-      "Product deleted successfully"
+      "Product deleted successfully",
+      null
     )
   );
 });

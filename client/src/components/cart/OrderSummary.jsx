@@ -2,18 +2,23 @@ import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
 const OrderSummary = () => {
-  const { cartItems } = useCart();
+  const {
+    cartItems,
+    cartTotal,
+    totalItems,
+  } = useCart();
 
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  // Shipping
+  const shipping =
+    cartTotal > 999 || cartTotal === 0 ? 0 : 99;
 
-  const shipping = subtotal > 999 || subtotal === 0 ? 0 : 99;
+  // Discount
+  const discount =
+    cartTotal >= 2000 ? 200 : 0;
 
-  const discount = subtotal >= 2000 ? 200 : 0;
-
-  const total = subtotal + shipping - discount;
+  // Final Total
+  const total =
+    cartTotal + shipping - discount;
 
   return (
     <div className="bg-white rounded-[32px] shadow-sm p-8 sticky top-28">
@@ -22,11 +27,17 @@ const OrderSummary = () => {
         Order Summary
       </h2>
 
+      {/* Order Details */}
       <div className="mt-8 space-y-5">
 
         <div className="flex justify-between text-gray-600">
+          <span>Total Items</span>
+          <span>{totalItems}</span>
+        </div>
+
+        <div className="flex justify-between text-gray-600">
           <span>Subtotal</span>
-          <span>₹{subtotal}</span>
+          <span>₹{cartTotal}</span>
         </div>
 
         <div className="flex justify-between text-gray-600">
@@ -52,7 +63,6 @@ const OrderSummary = () => {
       </div>
 
       {/* Coupon */}
-
       <div className="mt-8">
 
         <label className="block text-sm font-medium mb-3">
@@ -76,7 +86,6 @@ const OrderSummary = () => {
       </div>
 
       {/* Buttons */}
-
       <div className="mt-10 space-y-4">
 
         <Link

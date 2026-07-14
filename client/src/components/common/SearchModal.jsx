@@ -1,24 +1,39 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FiSearch, FiX } from "react-icons/fi";
-import { productData } from "../../constants/productData";
+
+import { getAllProducts } from "../../api/productApi";
 
 const SearchModal = ({ isOpen, onClose }) => {
   const [search, setSearch] = useState("");
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     if (!isOpen) {
       setSearch("");
+      setProducts([]);
     }
   }, [isOpen]);
 
-  const filteredProducts = useMemo(() => {
-    if (!search.trim()) return [];
-
-    return productData.filter((product) =>
-      product.name.toLowerCase().includes(search.toLowerCase())
-    );
+  useEffect(() => {
+    if (search.trim()) {
+      fetchProducts();
+    } else {
+      setProducts([]);
+    }
   }, [search]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getAllProducts({
+        search,
+      });
+
+      setProducts(response.data.products);
+    } catch (error) {
+      console.error("Search Error:", error);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -33,7 +48,6 @@ const SearchModal = ({ isOpen, onClose }) => {
       >
         {/* Header */}
         <div className="flex items-center gap-4 border-b px-6 py-5">
-
           <FiSearch className="text-2xl text-gray-400" />
 
           <input
@@ -48,11 +62,9 @@ const SearchModal = ({ isOpen, onClose }) => {
           <button onClick={onClose}>
             <FiX className="text-2xl hover:text-red-500" />
           </button>
-
         </div>
 
         {/* Results */}
-
         <div className="max-h-[500px] overflow-y-auto">
 
           {!search ? (
@@ -61,13 +73,13 @@ const SearchModal = ({ isOpen, onClose }) => {
               Start typing to search...
             </p>
 
-          ) : filteredProducts.length > 0 ? (
+          ) : products.length > 0 ? (
 
-            filteredProducts.map((product) => (
+            products.map((product) => (
 
               <Link
-                key={product.id}
-                to={`/product/${product.id}`}
+                key={product._id}
+                to={`/product/${product._id}`}
                 onClick={onClose}
                 className="flex items-center gap-5 p-5 hover:bg-gray-50 transition border-b"
               >

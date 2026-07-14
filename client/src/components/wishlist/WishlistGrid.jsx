@@ -19,7 +19,7 @@ const WishlistGrid = () => {
 
   const handleMoveToCart = (item) => {
     addToCart(item);
-    removeFromWishlist(item.id);
+    removeFromWishlist(item._id);
 
     toast.success("Moved to Cart");
   };
@@ -31,8 +31,6 @@ const WishlistGrid = () => {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white rounded-[32px] shadow-sm py-24 px-8 text-center"
       >
-        {/* Icon */}
-
         <motion.div
           animate={{
             scale: [1, 1.08, 1],
@@ -60,28 +58,22 @@ const WishlistGrid = () => {
           className="inline-flex items-center gap-3 mt-10 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold transition hover:scale-105"
         >
           Browse Products
-
           <FiArrowRight />
         </Link>
-
       </motion.div>
     );
   }
 
   return (
     <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
-
       {wishlistItems.map((item) => (
-
         <motion.div
-          key={item.id}
+          key={item._id}
           whileHover={{ y: -8 }}
           transition={{ duration: 0.25 }}
           className="bg-white rounded-[32px] overflow-hidden shadow-md hover:shadow-2xl"
         >
-
           {/* Image */}
-
           <img
             src={item.image}
             alt={item.name}
@@ -89,9 +81,7 @@ const WishlistGrid = () => {
           />
 
           {/* Content */}
-
           <div className="p-6">
-
             <p className="text-sm text-green-600 font-medium">
               {item.category}
             </p>
@@ -105,34 +95,27 @@ const WishlistGrid = () => {
             </p>
 
             <div className="flex gap-3 mt-8">
-
               <button
                 onClick={() => handleMoveToCart(item)}
                 className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-full font-semibold flex items-center justify-center gap-2 transition"
               >
                 <FaShoppingCart />
-
                 Move To Cart
-
               </button>
 
               <button
-                onClick={() =>
-                  removeFromWishlist(item.id)
-                }
+                onClick={() => {
+                  removeFromWishlist(item._id);
+                  toast.success("Removed from Wishlist");
+                }}
                 className="w-14 h-14 rounded-full border hover:bg-red-500 hover:text-white transition flex items-center justify-center"
               >
                 <FaTrash />
               </button>
-
             </div>
-
           </div>
-
         </motion.div>
-
       ))}
-
     </div>
   );
 };

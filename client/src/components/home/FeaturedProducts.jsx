@@ -1,17 +1,44 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-import { productData } from "../../constants/productData";
+import { getAllProducts } from "../../api/productApi";
 import ProductCard from "../common/ProductCard";
 
 const FeaturedProducts = () => {
-  const featured = productData.filter(
-    (product) => product.bestSeller
-  );
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getAllProducts();
+
+      const featuredProducts = response.data.products
+        .filter((product) => product.featured)
+        .slice(0, 4);
+
+      setProducts(featuredProducts);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center py-20">
+        Loading Products...
+      </div>
+    );
+  }
 
   return (
     <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
-
       <div className="max-w-7xl mx-auto px-6">
 
         <motion.div
@@ -21,9 +48,7 @@ const FeaturedProducts = () => {
           viewport={{ once: true }}
           className="flex flex-col lg:flex-row justify-between items-center mb-14"
         >
-
           <div>
-
             <p className="uppercase tracking-[5px] text-green-600 font-semibold">
               Featured Collection
             </p>
@@ -35,31 +60,26 @@ const FeaturedProducts = () => {
             <p className="mt-4 text-gray-500 max-w-xl">
               Discover dermatologist-approved skincare products loved by thousands of customers.
             </p>
-
           </div>
 
           <Link
-            to="/shop?type=bestseller"
+            to="/shop"
             className="mt-8 lg:mt-0 border border-green-500 text-green-600 hover:bg-green-500 hover:text-white px-8 py-4 rounded-full transition font-semibold"
           >
             View All Products
           </Link>
-
         </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-
-          {featured.map((product) => (
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {products.map((product) => (
             <ProductCard
-              key={product.id}
+              key={product._id}
               product={product}
             />
           ))}
-
         </div>
 
       </div>
-
     </section>
   );
 };

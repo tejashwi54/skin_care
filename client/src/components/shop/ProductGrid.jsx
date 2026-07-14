@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { productData } from "../../constants/productData";
+import { getAllProducts } from "../../api/productApi";
 import ProductCard from "../common/ProductCard";
 import SkeletonCard from "../common/SkeletonCard";
 
@@ -8,52 +8,46 @@ const ProductGrid = ({
   category = "All",
   type = null,
 }) => {
+  const [products, setProducts] = useState([]);
   const [sort, setSort] = useState("featured");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    fetchProducts();
+  }, [search, category, type]);
+
+  const fetchProducts = async () => {
+    try {
+      const params = {};
+
+      if (search) {
+        params.search = search;
+      }
+
+      if (category !== "All") {
+        params.category = category;
+      }
+
+      const response = await getAllProducts(params);
+
+      let fetchedProducts = response.data.products;
+
+      if (type === "bestseller") {
+        fetchedProducts = fetchedProducts.filter(
+          (product) => product.featured
+        );
+      }
+
+      setProducts(fetchedProducts);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
       setLoading(false);
-    }, 800);
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Skeleton Loader
-  if (loading) {
-    return (
-      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
-        {[1, 2, 3, 4, 5, 6].map((item) => (
-          <SkeletonCard key={item} />
-        ))}
-      </div>
-    );
-  }
-
-  // Filter Products
-  const filteredProducts = productData.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesCategory =
-      category === "All" ||
-      product.category === category;
-
-    const matchesType =
-      type === "bestseller"
-        ? product.bestSeller === true
-        : true;
-
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesType
-    );
-  });
-
-  // Sort Products
-  const sortedProducts = [...filteredProducts];
+  // Sorting
+  const sortedProducts = [...products];
 
   switch (sort) {
     case "low":
@@ -69,11 +63,25 @@ const ProductGrid = ({
       break;
 
     case "newest":
-      sortedProducts.sort((a, b) => b.id - a.id);
+      sortedProducts.sort(
+        (a, b) =>
+          new Date(b.createdAt) - new Date(a.createdAt)
+      );
       break;
 
     default:
       break;
+  }
+
+  // Loading State
+  if (loading) {
+    return (
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+        {[1, 2, 3, 4, 5, 6].map((item) => (
+          <SkeletonCard key={item} />
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -107,22 +115,18 @@ const ProductGrid = ({
 
       </div>
 
-      {/* Product Grid */}
       {sortedProducts.length > 0 ? (
-
         <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
 
           {sortedProducts.map((product) => (
             <ProductCard
-              key={product.id}
+              key={product._id}
               product={product}
             />
           ))}
 
         </div>
-
       ) : (
-
         <div className="bg-white rounded-3xl shadow-md py-24 text-center">
 
           <h2 className="text-3xl font-bold">
@@ -134,9 +138,7 @@ const ProductGrid = ({
           </p>
 
         </div>
-
       )}
-
     </>
   );
 };

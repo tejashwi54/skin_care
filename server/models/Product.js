@@ -4,43 +4,38 @@ const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Product name is required"],
       trim: true,
     },
 
     description: {
       type: String,
-      required: true,
+      required: [true, "Description is required"],
     },
 
     category: {
       type: String,
-      required: true,
+      required: [true, "Category is required"],
+      trim: true,
+    },
+
+    image: {
+      type: String,
+      required: [true, "Product image is required"],
     },
 
     price: {
       type: Number,
-      required: true,
+      required: [true, "Price is required"],
+      min: 0,
+    },
+
+    oldPrice: {
+      type: Number,
+      default: 0,
     },
 
     stock: {
-      type: Number,
-      default: 0,
-    },
-
-    images: [
-      {
-        url: String,
-        public_id: String,
-      },
-    ],
-
-    rating: {
-      type: Number,
-      default: 0,
-    },
-
-    numReviews: {
       type: Number,
       default: 0,
     },
@@ -50,9 +45,19 @@ const productSchema = new mongoose.Schema(
       default: false,
     },
 
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    rating: {
+      type: Number,
+      default: 5,
+    },
+
+    reviews: {
+      type: Number,
+      default: 0,
+    },
+
+    badge: {
+      type: String,
+      default: "New",
     },
   },
   {
@@ -60,4 +65,7 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model(
+  "Product",
+  productSchema
+);

@@ -1,63 +1,91 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-
+  // Load Cart From LocalStorage
   const [cartItems, setCartItems] = useState(() => {
-  const saved = localStorage.getItem("cart");
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  return saved ? JSON.parse(saved) : [];
-});
+    const cartKey = user ? `cart_${user._id}` : "cart_guest";
 
-useEffect(() => {
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cartItems)
-  );
-}, [cartItems]);
+    const savedCart = localStorage.getItem(cartKey);
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
+  // Save Cart To LocalStorage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+const cartKey = user ? `cart_${user._id}` : "cart_guest";
+
+localStorage.setItem(
+  cartKey,
+  JSON.stringify(cartItems)
+);
+  }, [cartItems]);
+
+  // ===========================
+  // Add To Cart
+  // ===========================
   const addToCart = (product) => {
-
-    const existing = cartItems.find(
-      (item) => item.id === product.id
-    );
-
-    if (existing) {
-
-      setCartItems(
-        cartItems.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
+    setCartItems((prevItems) => {
+      const existingProduct = prevItems.find(
+        (item) => item._id === product._id
       );
 
-    } else {
+      if (existingProduct) {
+        return prevItems.map((item) =>
+          item._id === product._id
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+              }
+            : item
+        );
+      }
 
-      setCartItems([
-        ...cartItems,
+      return [
+        ...prevItems,
         {
           ...product,
           quantity: 1,
         },
-      ]);
-
-    }
-
+      ];
+    });
   };
 
+  // ===========================
+  // Remove Item
+  // ===========================
   const removeFromCart = (id) => {
-    setCartItems(
-      cartItems.filter((item) => item.id !== id)
+  console.log("Remove ID:", id);
+
+  setCartItems((prevItems) => {
+    console.log("Before:", prevItems);
+
+    const updated = prevItems.filter(
+      (item) => item._id !== id
     );
-  };
 
+    console.log("After:", updated);
+
+    return updated;
+  });
+};
+
+  // ===========================
+  // Increase Quantity
+  // ===========================
   const increaseQuantity = (id) => {
-
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === id
           ? {
               ...item,
               quantity: item.quantity + 1,
@@ -65,15 +93,16 @@ useEffect(() => {
           : item
       )
     );
-
   };
 
+  // ===========================
+  // Decrease Quantity
+  // ===========================
   const decreaseQuantity = (id) => {
-
-    setCartItems(
-      cartItems
+    setCartItems((prevItems) =>
+      prevItems
         .map((item) =>
-          item.id === id
+          item._id === id
             ? {
                 ...item,
                 quantity: item.quantity - 1,
@@ -82,11 +111,34 @@ useEffect(() => {
         )
         .filter((item) => item.quantity > 0)
     );
-
   };
 
-  return (
+  // ===========================
+  // Clear Cart
+  // ===========================
+  const clearCart = () => {
+    setCartItems([]);
+  };
 
+  // ===========================
+  // Cart Total
+  // ===========================
+  const cartTotal = cartItems.reduce(
+    (total, item) =>
+      total + item.price * item.quantity,
+    0
+  );
+
+  // ===========================
+  // Total Items
+  // ===========================
+  const totalItems = cartItems.reduce(
+    (total, item) =>
+      total + item.quantity,
+    0
+  );
+
+  return (
     <CartContext.Provider
       value={{
         cartItems,
@@ -94,15 +146,15 @@ useEffect(() => {
         removeFromCart,
         increaseQuantity,
         decreaseQuantity,
+        clearCart,
+        cartTotal,
+        totalItems,
       }}
     >
-
       {children}
-
     </CartContext.Provider>
-
   );
-
 };
 
-export const useCart = () => useContext(CartContext);
+export const useCart = () =>
+  useContext(CartContext);

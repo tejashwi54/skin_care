@@ -1,6 +1,55 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import { loginUser } from "../../api/authApi";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await loginUser(formData);
+
+      toast.success(response.message);
+
+      window.location.href = "/dashboard";
+
+    } catch (error) {
+
+      toast.error(
+        error.response?.data?.message ||
+          "Login Failed"
+      );
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-[32px] shadow-lg p-10">
 
@@ -16,25 +65,35 @@ const LoginForm = () => {
         Sign in to continue shopping.
       </p>
 
-      <form className="mt-8 space-y-5">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-8 space-y-5"
+      >
 
         <input
           type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
           placeholder="Email Address"
           className="w-full border border-gray-300 rounded-xl px-5 py-4 outline-none focus:border-green-500"
         />
 
         <input
           type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
           placeholder="Password"
           className="w-full border border-gray-300 rounded-xl px-5 py-4 outline-none focus:border-green-500"
         />
 
         <button
           type="submit"
+          disabled={loading}
           className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold transition"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
 
       </form>

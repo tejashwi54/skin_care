@@ -9,13 +9,27 @@ import {
   FiShield,
   FiRefreshCcw,
 } from "react-icons/fi";
+import toast from "react-hot-toast";
+
+import { useCart } from "../../context/CartContext";
 
 const ProductInfo = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
 
+  const { addToCart } = useCart();
+
   const discount = Math.round(
     ((product.oldPrice - product.price) / product.oldPrice) * 100
   );
+
+  const handleAddToCart = () => {
+    // Add product according to selected quantity
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product);
+    }
+
+    toast.success(`${product.name} added to cart 🛒`);
+  };
 
   return (
     <div className="max-w-[520px]">
@@ -63,7 +77,7 @@ const ProductInfo = ({ product }) => {
 
       {/* Stock */}
       <p className="mt-4 text-green-600 font-semibold">
-        ✓ {product.stock}
+        ✓ {product.stock} In Stock
       </p>
 
       {/* Description */}
@@ -116,7 +130,10 @@ const ProductInfo = ({ product }) => {
       {/* Buttons */}
       <div className="flex flex-col gap-4 mt-10">
 
-        <button className="bg-green-500 hover:bg-green-600 text-white py-4 rounded-full font-semibold flex items-center justify-center gap-3 transition">
+        <button
+          onClick={handleAddToCart}
+          className="bg-green-500 hover:bg-green-600 text-white py-4 rounded-full font-semibold flex items-center justify-center gap-3 transition"
+        >
           <FaShoppingCart />
           Add To Cart
         </button>
