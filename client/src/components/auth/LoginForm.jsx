@@ -36,6 +36,7 @@ const LoginForm = () => {
 
       toast.success(response.message);
 
+<<<<<<< HEAD
       // Redirect after successful login
       navigate("/dashboard");
 
@@ -44,6 +45,17 @@ const LoginForm = () => {
         error.response?.data?.message ||
         "Login Failed"
       );
+=======
+      window.location.href = "/dashboard";
+
+    } catch (error) {
+
+      toast.error(
+        error.response?.data?.message ||
+          "Login Failed"
+      );
+
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     } finally {
       setLoading(false);
     }
@@ -68,6 +80,10 @@ const LoginForm = () => {
         onSubmit={handleSubmit}
         className="mt-8 space-y-5"
       >
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         <input
           type="email"
           name="email"
@@ -89,10 +105,18 @@ const LoginForm = () => {
         <button
           type="submit"
           disabled={loading}
+<<<<<<< HEAD
           className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold transition disabled:opacity-60"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
+=======
+          className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold transition"
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
       </form>
 
       <p className="text-center mt-6 text-gray-500">

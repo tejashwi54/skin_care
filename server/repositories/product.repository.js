@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 
+<<<<<<< HEAD
 // ==============================
 // Create Product
 // ==============================
@@ -15,6 +16,13 @@ const getProducts = (
 ) => {
   const {
     sort = { createdAt: -1 },
+=======
+const createProduct = (data) => Product.create(data);
+
+const getProducts = (filter, options = {}) => {
+  const {
+    sort = "-createdAt",
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     skip = 0,
     limit = 10,
   } = options;
@@ -22,6 +30,7 @@ const getProducts = (
   return Product.find(filter)
     .sort(sort)
     .skip(skip)
+<<<<<<< HEAD
     .limit(limit)
     .lean();
 };
@@ -41,15 +50,29 @@ const getProductById = (id) =>
 // ==============================
 // Update Product
 // ==============================
+=======
+    .limit(limit);
+};
+
+const countProducts = (filter) =>
+  Product.countDocuments(filter);
+
+const getProductById = (id) =>
+  Product.findById(id);
+
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 const updateProduct = (id, data) =>
   Product.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,
   });
 
+<<<<<<< HEAD
 // ==============================
 // Delete Product
 // ==============================
+=======
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 const deleteProduct = (id) =>
   Product.findByIdAndDelete(id);
 

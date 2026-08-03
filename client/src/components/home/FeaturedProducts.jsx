@@ -17,6 +17,7 @@ const FeaturedProducts = () => {
     try {
       const response = await getAllProducts();
 
+<<<<<<< HEAD
       console.log("API Response:", response);
 
       // Backend response:
@@ -29,6 +30,11 @@ const FeaturedProducts = () => {
         allProducts.filter((product) => product.featured).length > 0
           ? allProducts.filter((product) => product.featured).slice(0, 4)
           : allProducts.slice(0, 4);
+=======
+      const featuredProducts = response.data.products
+        .filter((product) => product.featured)
+        .slice(0, 4);
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
       setProducts(featuredProducts);
     } catch (error) {
@@ -40,7 +46,11 @@ const FeaturedProducts = () => {
 
   if (loading) {
     return (
+<<<<<<< HEAD
       <div className="text-center py-20 text-lg font-medium">
+=======
+      <div className="text-center py-20">
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         Loading Products...
       </div>
     );
@@ -49,6 +59,10 @@ const FeaturedProducts = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-6">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -66,8 +80,12 @@ const FeaturedProducts = () => {
             </h2>
 
             <p className="mt-4 text-gray-500 max-w-xl">
+<<<<<<< HEAD
               Discover dermatologist-approved skincare products loved by
               thousands of customers.
+=======
+              Discover dermatologist-approved skincare products loved by thousands of customers.
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
             </p>
           </div>
 
@@ -79,6 +97,7 @@ const FeaturedProducts = () => {
           </Link>
         </motion.div>
 
+<<<<<<< HEAD
         {products.length > 0 ? (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {products.map((product) => (
@@ -90,6 +109,17 @@ const FeaturedProducts = () => {
             No products found.
           </div>
         )}
+=======
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {products.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+            />
+          ))}
+        </div>
+
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
       </div>
     </section>
   );

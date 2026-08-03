@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+<<<<<<< HEAD
 // ==============================
 // Additional Database Indexes
 // ==============================
@@ -64,6 +65,9 @@ userSchema.index({ createdAt: -1 });
 // ==============================
 // Hash Password Before Save
 // ==============================
+=======
+// Hash password before saving
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) {
     return;
@@ -72,9 +76,13 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 10);
 });
 
+<<<<<<< HEAD
 // ==============================
 // Compare Password
 // ==============================
+=======
+// Compare password
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(
     enteredPassword,

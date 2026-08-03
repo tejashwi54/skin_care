@@ -15,6 +15,10 @@ const {
 // Middlewares
 const { protect } = require("../middlewares/auth.middleware");
 const authorize = require("../middlewares/role.middleware");
+// Auth Middleware
+const { protect } = require("../middlewares/auth.middleware");
+
+// Validation Middleware
 const validate = require("../middlewares/validate.middleware");
 
 // Validators

@@ -6,6 +6,7 @@ const morgan = require("morgan");
 
 const errorHandler = require("./middlewares/error.middleware");
 
+<<<<<<< HEAD
 // ==============================
 // Routes
 // ==============================
@@ -14,6 +15,12 @@ const productRoutes = require("./routes/product.routes");
 const orderRoutes = require("./routes/order.routes");
 const cartRoutes = require("./routes/cart.routes");
 const wishlistRoutes = require("./routes/wishlist.routes");
+=======
+// Routes
+const authRoutes = require("./routes/auth.routes");
+const productRoutes = require("./routes/product.routes");
+const orderRoutes = require("./routes/order.routes");
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
 const app = express();
 
@@ -66,8 +73,11 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
+<<<<<<< HEAD
 app.use("/api/cart", cartRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+=======
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
 // ==============================
 // 404 Route

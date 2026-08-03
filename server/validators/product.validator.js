@@ -4,22 +4,31 @@ const productValidator = [
   body("name")
     .trim()
     .notEmpty()
+<<<<<<< HEAD
     .withMessage("Product name is required")
     .isLength({ min: 3, max: 100 })
     .withMessage("Product name must be between 3 and 100 characters"),
+=======
+    .withMessage("Product name is required"),
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
   body("description")
     .trim()
     .notEmpty()
+<<<<<<< HEAD
     .withMessage("Description is required")
     .isLength({ min: 10 })
     .withMessage("Description must be at least 10 characters"),
+=======
+    .withMessage("Description is required"),
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
   body("category")
     .trim()
     .notEmpty()
     .withMessage("Category is required"),
 
+<<<<<<< HEAD
   body("image")
     .trim()
     .notEmpty()
@@ -52,6 +61,15 @@ const productValidator = [
     .optional()
     .isInt({ min: 0 })
     .withMessage("Reviews must be greater than or equal to 0"),
+=======
+  body("price")
+    .isNumeric()
+    .withMessage("Price must be a number"),
+
+  body("stock")
+    .isNumeric()
+    .withMessage("Stock must be a number"),
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 ];
 
 module.exports = {

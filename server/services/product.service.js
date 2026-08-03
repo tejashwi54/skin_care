@@ -1,13 +1,18 @@
 const ApiError = require("../utils/ApiError");
 const productRepository = require("../repositories/product.repository");
 
+<<<<<<< HEAD
 // ==============================
 // Create Product
 // ==============================
+=======
+// Create Product
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 const createProduct = async (data) => {
   return await productRepository.createProduct(data);
 };
 
+<<<<<<< HEAD
 // ==============================
 // Get All Products
 // ==============================
@@ -15,6 +20,13 @@ const getAllProducts = async (query = {}) => {
   const filter = {};
 
   // Search
+=======
+// Get All Products (Search + Filter + Pagination + Sorting)
+const getAllProducts = async (query = {}) => {
+  const filter = {};
+
+  // Search by Name, Category, Description
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
   if (query.search) {
     filter.$or = [
       {
@@ -38,7 +50,11 @@ const getAllProducts = async (query = {}) => {
     ];
   }
 
+<<<<<<< HEAD
   // Category
+=======
+  // Category Filter
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
   if (query.category) {
     filter.category = {
       $regex: query.category,
@@ -46,7 +62,11 @@ const getAllProducts = async (query = {}) => {
     };
   }
 
+<<<<<<< HEAD
   // Price
+=======
+  // Price Filter
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
   if (query.minPrice || query.maxPrice) {
     filter.price = {};
 
@@ -59,6 +79,7 @@ const getAllProducts = async (query = {}) => {
     }
   }
 
+<<<<<<< HEAD
   // Rating
   if (query.rating) {
     filter.rating = {
@@ -133,6 +154,38 @@ const getAllProducts = async (query = {}) => {
 const getProductById = async (id) => {
   const product =
     await productRepository.getProductById(id);
+=======
+  // Pagination
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 8;
+  const skip = (page - 1) * limit;
+
+  // Sorting
+  const sort = query.sort || "-createdAt";
+
+  // Fetch Products
+  const products = await productRepository.getProducts(filter, {
+    sort,
+    skip,
+    limit,
+  });
+
+  // Total Products Count
+  const totalProducts = await productRepository.countProducts(filter);
+
+  return {
+    products,
+    currentPage: page,
+    totalPages: Math.ceil(totalProducts / limit),
+    totalProducts,
+    limit,
+  };
+};
+
+// Get Single Product
+const getProductById = async (id) => {
+  const product = await productRepository.getProductById(id);
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
   if (!product) {
     throw new ApiError(404, "Product not found");
@@ -141,12 +194,18 @@ const getProductById = async (id) => {
   return product;
 };
 
+<<<<<<< HEAD
 // ==============================
 // Update Product
 // ==============================
 const updateProduct = async (id, data) => {
   const product =
     await productRepository.updateProduct(id, data);
+=======
+// Update Product
+const updateProduct = async (id, data) => {
+  const product = await productRepository.updateProduct(id, data);
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
   if (!product) {
     throw new ApiError(404, "Product not found");
@@ -155,12 +214,18 @@ const updateProduct = async (id, data) => {
   return product;
 };
 
+<<<<<<< HEAD
 // ==============================
 // Delete Product
 // ==============================
 const deleteProduct = async (id) => {
   const product =
     await productRepository.deleteProduct(id);
+=======
+// Delete Product
+const deleteProduct = async (id) => {
+  const product = await productRepository.deleteProduct(id);
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
   if (!product) {
     throw new ApiError(404, "Product not found");

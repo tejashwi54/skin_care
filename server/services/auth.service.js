@@ -19,6 +19,7 @@ const registerUser = async (data) => {
 
   const token = generateToken(user._id);
 
+<<<<<<< HEAD
   return {
     user: {
       _id: user._id,
@@ -28,6 +29,19 @@ const registerUser = async (data) => {
       avatar: user.avatar,
       isVerified: user.isVerified,
     },
+=======
+  const userResponse = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    avatar: user.avatar,
+    isVerified: user.isVerified,
+  };
+
+  return {
+    user: userResponse,
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     token,
   };
 };
@@ -47,6 +61,7 @@ const loginUser = async (email, password) => {
 
   const token = generateToken(user._id);
 
+<<<<<<< HEAD
   return {
     user: {
       _id: user._id,
@@ -56,6 +71,19 @@ const loginUser = async (email, password) => {
       avatar: user.avatar,
       isVerified: user.isVerified,
     },
+=======
+  const userResponse = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    avatar: user.avatar,
+    isVerified: user.isVerified,
+  };
+
+  return {
+    user: userResponse,
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     token,
   };
 };

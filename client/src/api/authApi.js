@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
+<<<<<<< HEAD
 // ==============================
 // Register User
 // ==============================
@@ -22,6 +23,17 @@ export const loginUser = async (loginData) => {
   );
 
   // Store only user information
+=======
+export const registerUser = async (userData) => {
+  const response = await axiosInstance.post("/auth/register", userData);
+  return response.data;
+};
+
+export const loginUser = async (loginData) => {
+  const response = await axiosInstance.post("/auth/login", loginData);
+
+  localStorage.setItem("token", response.data.data.token);
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
   localStorage.setItem(
     "user",
     JSON.stringify(response.data.data.user)
@@ -30,6 +42,7 @@ export const loginUser = async (loginData) => {
   return response.data;
 };
 
+<<<<<<< HEAD
 // ==============================
 // Get Current User
 // ==============================
@@ -45,5 +58,9 @@ export const getCurrentUser = async () => {
 export const logoutUser = async () => {
   await axiosInstance.post("/auth/logout");
 
+=======
+export const logoutUser = () => {
+  localStorage.removeItem("token");
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
   localStorage.removeItem("user");
 };

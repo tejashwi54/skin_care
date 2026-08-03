@@ -30,18 +30,25 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
           default: 1,
+<<<<<<< HEAD
           min: 1,
+=======
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         },
 
         price: {
           type: Number,
           required: true,
+<<<<<<< HEAD
           min: 0,
+=======
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         },
       },
     ],
 
     shippingAddress: {
+<<<<<<< HEAD
       firstName: {
         type: String,
         required: true,
@@ -74,6 +81,16 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+=======
+      firstName: String,
+      lastName: String,
+      email: String,
+      phone: String,
+      address: String,
+      city: String,
+      state: String,
+      pinCode: String,
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     },
 
     paymentMethod: {
@@ -82,21 +99,29 @@ const orderSchema = new mongoose.Schema(
       default: "COD",
     },
 
+<<<<<<< HEAD
     itemsPrice: {
       type: Number,
       required: true,
       min: 0,
     },
+=======
+    itemsPrice: Number,
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
     shippingPrice: {
       type: Number,
       default: 0,
+<<<<<<< HEAD
       min: 0,
+=======
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     },
 
     discount: {
       type: Number,
       default: 0,
+<<<<<<< HEAD
       min: 0,
     },
 
@@ -105,6 +130,11 @@ const orderSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+=======
+    },
+
+    totalPrice: Number,
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
     orderStatus: {
       type: String,
@@ -132,6 +162,7 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
+<<<<<<< HEAD
 // ==============================
 // Database Indexes
 // ==============================
@@ -151,6 +182,8 @@ orderSchema.index({ user: 1, createdAt: -1 });
 // Paid orders
 orderSchema.index({ isPaid: 1 });
 
+=======
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 module.exports = mongoose.model(
   "Order",
   orderSchema

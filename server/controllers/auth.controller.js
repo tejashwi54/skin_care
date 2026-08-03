@@ -22,6 +22,7 @@ const login = asyncHandler(async (req, res) => {
     password
   );
 
+<<<<<<< HEAD
   // Store JWT in httpOnly Cookie
   res.cookie("token", result.token, {
     httpOnly: true,
@@ -30,13 +31,19 @@ const login = asyncHandler(async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 Days
   });
 
+=======
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
   res.status(200).json(
     new ApiResponse(
       200,
       "Login Successful",
+<<<<<<< HEAD
       {
         user: result.user,
       }
+=======
+      result
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     )
   );
 });
@@ -54,12 +61,16 @@ const getMe = asyncHandler(async (req, res) => {
 });
 
 const logout = asyncHandler(async (req, res) => {
+<<<<<<< HEAD
   // Clear Cookie
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
   });
+=======
+  await authService.logoutUser();
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
   res.status(200).json(
     new ApiResponse(

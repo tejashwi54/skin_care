@@ -4,6 +4,7 @@ const router = express.Router();
 
 const productController = require("../controllers/product.controller");
 
+<<<<<<< HEAD
 const { protect } = require("../middlewares/auth.middleware");
 const authorize = require("../middlewares/role.middleware");
 const validate = require("../middlewares/validate.middleware");
@@ -51,5 +52,21 @@ router.delete(
   authorize("admin"),
   productController.deleteProduct
 );
+=======
+// Create Product
+router.post("/", productController.createProduct);
+
+// Get All Products
+router.get("/", productController.getAllProducts);
+
+// Get Single Product
+router.get("/:id", productController.getProductById);
+
+// Update Product
+router.put("/:id", productController.updateProduct);
+
+// Delete Product
+router.delete("/:id", productController.deleteProduct);
+>>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
 module.exports = router;
