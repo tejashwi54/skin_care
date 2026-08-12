@@ -29,7 +29,10 @@ const cartSchema = new mongoose.Schema(
       unique: true,
     },
 
-    items: [cartItemSchema],
+    items: {
+      type: [cartItemSchema],
+      default: [],
+    },
   },
   {
     timestamps: true,

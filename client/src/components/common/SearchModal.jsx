@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FiSearch, FiX } from "react-icons/fi";
 
 import { getAllProducts } from "../../api/productApi";
+import { getId } from "../../utils/getId";
 
 const SearchModal = ({ isOpen, onClose }) => {
   const [search, setSearch] = useState("");
@@ -78,8 +79,8 @@ const SearchModal = ({ isOpen, onClose }) => {
             products.map((product) => (
 
               <Link
-                key={product._id}
-                to={`/product/${product._id}`}
+                key={getId(product)}
+                to={`/product/${getId(product)}`}
                 onClick={onClose}
                 className="flex items-center gap-5 p-5 hover:bg-gray-50 transition border-b"
               >

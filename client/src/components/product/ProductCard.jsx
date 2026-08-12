@@ -6,6 +6,7 @@ import { FaHeart, FaEye, FaStar } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import QuickViewModal from "./QuickViewModal";
+import { getId } from "../../utils/getId";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
@@ -13,7 +14,8 @@ const ProductCard = ({ product }) => {
 
   const [quickOpen, setQuickOpen] = useState(false);
 
-  const liked = isInWishlist(product.id);
+  const productId = getId(product);
+  const liked = isInWishlist(product);
 
   const handleAddToCart = () => {
     addToCart(product);
@@ -67,7 +69,7 @@ const ProductCard = ({ product }) => {
 </button>
 
           {/* Product Image */}
-          <Link to={`/product/${product.id}`}>
+          <Link to={`/product/${productId}`}>
             <img
               src={product.image}
               alt={product.name}
@@ -88,7 +90,7 @@ const ProductCard = ({ product }) => {
 
         {/* Content */}
         <Link
-          to={`/product/${product.id}`}
+          to={`/product/${productId}`}
           className="flex-1 flex flex-col"
         >
           <div className="p-6 flex flex-col flex-1">

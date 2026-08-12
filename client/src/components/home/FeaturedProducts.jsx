@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { getAllProducts } from "../../api/productApi";
 import ProductCard from "../common/ProductCard";
+import { getId } from "../../utils/getId";
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,26 +16,13 @@ const FeaturedProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await getAllProducts();
+      const response = await getAllProducts({
+  limit: 50,
+});
 
-<<<<<<< HEAD
-      console.log("API Response:", response);
-
-      // Backend response:
-      // response.data.products
-      const allProducts = response.data?.products || [];
-
-      console.log("Products:", allProducts);
-
-      const featuredProducts =
-        allProducts.filter((product) => product.featured).length > 0
-          ? allProducts.filter((product) => product.featured).slice(0, 4)
-          : allProducts.slice(0, 4);
-=======
       const featuredProducts = response.data.products
         .filter((product) => product.featured)
         .slice(0, 4);
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
       setProducts(featuredProducts);
     } catch (error) {
@@ -46,11 +34,7 @@ const FeaturedProducts = () => {
 
   if (loading) {
     return (
-<<<<<<< HEAD
-      <div className="text-center py-20 text-lg font-medium">
-=======
       <div className="text-center py-20">
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         Loading Products...
       </div>
     );
@@ -59,10 +43,6 @@ const FeaturedProducts = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-6">
-<<<<<<< HEAD
-=======
-
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,20 +52,15 @@ const FeaturedProducts = () => {
         >
           <div>
             <p className="uppercase tracking-[5px] text-green-600 font-semibold">
-              Featured Collection
+              Curated For You
             </p>
 
             <h2 className="text-5xl font-bold mt-3 text-gray-900">
-              Best Selling Products
+              Featured Products
             </h2>
 
             <p className="mt-4 text-gray-500 max-w-xl">
-<<<<<<< HEAD
-              Discover dermatologist-approved skincare products loved by
-              thousands of customers.
-=======
-              Discover dermatologist-approved skincare products loved by thousands of customers.
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
+              Discover our specially selected skincare products.
             </p>
           </div>
 
@@ -97,29 +72,15 @@ const FeaturedProducts = () => {
           </Link>
         </motion.div>
 
-<<<<<<< HEAD
-        {products.length > 0 ? (
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-10 text-gray-500 text-lg">
-            No products found.
-          </div>
-        )}
-=======
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
             <ProductCard
-              key={product._id}
+              key={getId(product)}
               product={product}
             />
           ))}
         </div>
 
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
       </div>
     </section>
   );

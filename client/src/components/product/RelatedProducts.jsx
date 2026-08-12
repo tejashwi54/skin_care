@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllProducts } from "../../api/productApi";
 import ProductCard from "../common/ProductCard";
+import { getId } from "../../utils/getId";
 
 const RelatedProducts = ({ currentProduct }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -18,7 +19,7 @@ const RelatedProducts = ({ currentProduct }) => {
     // Same Category Products
     let related = products.filter(
       (product) =>
-        product._id !== currentProduct._id &&
+        getId(product) !== getId(currentProduct) &&
         product.category === currentProduct.category
     );
 
@@ -26,8 +27,8 @@ const RelatedProducts = ({ currentProduct }) => {
     if (related.length < 4) {
       const remainingProducts = products.filter(
         (product) =>
-          product._id !== currentProduct._id &&
-          !related.some((item) => item._id === product._id)
+          getId(product) !== getId(currentProduct) &&
+          !related.some((item) => getId(item) === getId(product))
       );
 
       related = [
@@ -70,7 +71,7 @@ const RelatedProducts = ({ currentProduct }) => {
 
           {relatedProducts.map((product) => (
             <ProductCard
-              key={product._id}
+              key={getId(product)}
               product={product}
             />
           ))}

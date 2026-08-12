@@ -23,10 +23,7 @@ const ProductInfo = ({ product }) => {
   );
 
   const handleAddToCart = () => {
-    // Add product according to selected quantity
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
+    addToCart(product, quantity);
 
     toast.success(`${product.name} added to cart 🛒`);
   };

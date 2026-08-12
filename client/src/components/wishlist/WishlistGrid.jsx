@@ -10,18 +10,20 @@ import toast from "react-hot-toast";
 
 import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext";
+import { getId } from "../../utils/getId";
 
 const WishlistGrid = () => {
-  const { wishlistItems, removeFromWishlist } =
-    useWishlist();
+  const {
+    wishlistItems,
+    removeFromWishlist,
+  } = useWishlist();
 
   const { addToCart } = useCart();
 
   const handleMoveToCart = (item) => {
     addToCart(item);
-    removeFromWishlist(item._id);
-
-    toast.success("Moved to Cart");
+    removeFromWishlist(item);
+    toast.success("Moved to Cart 🛒");
   };
 
   if (wishlistItems.length === 0) {
@@ -32,9 +34,7 @@ const WishlistGrid = () => {
         className="bg-white rounded-[32px] shadow-sm py-24 px-8 text-center"
       >
         <motion.div
-          animate={{
-            scale: [1, 1.08, 1],
-          }}
+          animate={{ scale: [1, 1.08, 1] }}
           transition={{
             repeat: Infinity,
             duration: 2,
@@ -49,13 +49,12 @@ const WishlistGrid = () => {
         </h2>
 
         <p className="mt-5 max-w-lg mx-auto text-lg text-gray-500 leading-8">
-          Save your favourite skincare products here
-          and purchase them anytime.
+          Save your favourite skincare products here and purchase them anytime.
         </p>
 
         <Link
           to="/shop"
-          className="inline-flex items-center gap-3 mt-10 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold transition hover:scale-105"
+          className="inline-flex items-center gap-3 mt-10 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold transition"
         >
           Browse Products
           <FiArrowRight />
@@ -68,19 +67,17 @@ const WishlistGrid = () => {
     <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
       {wishlistItems.map((item) => (
         <motion.div
-          key={item._id}
+          key={getId(item)}
           whileHover={{ y: -8 }}
           transition={{ duration: 0.25 }}
           className="bg-white rounded-[32px] overflow-hidden shadow-md hover:shadow-2xl"
         >
-          {/* Image */}
           <img
             src={item.image}
             alt={item.name}
             className="w-full h-72 object-cover"
           />
 
-          {/* Content */}
           <div className="p-6">
             <p className="text-sm text-green-600 font-medium">
               {item.category}
@@ -105,7 +102,7 @@ const WishlistGrid = () => {
 
               <button
                 onClick={() => {
-                  removeFromWishlist(item._id);
+                  removeFromWishlist(item);
                   toast.success("Removed from Wishlist");
                 }}
                 className="w-14 h-14 rounded-full border hover:bg-red-500 hover:text-white transition flex items-center justify-center"

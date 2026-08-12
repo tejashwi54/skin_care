@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 
 import { useCart } from "../../context/CartContext";
 import { placeOrder } from "../../api/orderApi";
+import { getId } from "../../utils/getId";
 
 const OrderSummary = ({
   billingData,
@@ -60,7 +61,7 @@ const OrderSummary = ({
     try {
       const orderData = {
         orderItems: cartItems.map((item) => ({
-          product: item._id,
+          product: getId(item),
           name: item.name,
           image: item.image,
           quantity: item.quantity,
@@ -84,7 +85,7 @@ const OrderSummary = ({
 
       toast.success("Order placed successfully!");
 
-      clearCart();
+      await clearCart();
 
       navigate("/order-success");
 
@@ -109,7 +110,7 @@ const OrderSummary = ({
 
         {cartItems.map((item) => (
           <div
-            key={item._id}
+            key={getId(item)}
             className="flex justify-between"
           >
             <div>

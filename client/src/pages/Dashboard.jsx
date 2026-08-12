@@ -1,12 +1,17 @@
 import { useState } from "react";
+
 import MainLayout from "../layouts/MainLayout";
+
 import DashboardSidebar from "../components/dashboard/DashboardSidebar";
+
 import DashboardContent from "../components/dashboard/DashboardContent";
 
-const Dashboard = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+import { useAuth } from "../context/AuthContext";
 
-  const [activeTab, setActiveTab] = useState("profile");
+const Dashboard = () => {
+  const [activeTab, setActiveTab] = useState("dashboard");
+
+  const { user } = useAuth();
 
   return (
     <MainLayout>
@@ -25,7 +30,9 @@ const Dashboard = () => {
             </h1>
 
             <p className="mt-3 text-gray-500 text-lg">
-              Manage your profile, orders and wishlist from your dashboard.
+              {user?.role === "admin"
+                ? "Manage your store, products, orders and customers."
+                : "Manage your profile, orders and wishlist from your dashboard."}
             </p>
           </div>
 
@@ -39,7 +46,7 @@ const Dashboard = () => {
               />
             </div>
 
-            {/* Dashboard Content */}
+            {/* Content */}
             <div className="flex-1">
               <DashboardContent activeTab={activeTab} />
             </div>
@@ -53,3 +60,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

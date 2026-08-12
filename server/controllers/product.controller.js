@@ -1,10 +1,24 @@
 const asyncHandler = require("../utils/asyncHandler");
 const ApiResponse = require("../utils/ApiResponse");
 const productService = require("../services/product.service");
+const uploadToCloudinary = require("../utils/cloudinaryUpload");
 
 // Create Product
 const createProduct = asyncHandler(async (req, res) => {
-  const product = await productService.createProduct(req.body);
+  let imageUrl = req.body.image;
+
+  if (req.file) {
+    const uploadedImage = await uploadToCloudinary(
+      req.file.buffer
+    );
+
+    imageUrl = uploadedImage.secure_url;
+  }
+
+  const product = await productService.createProduct({
+    ...req.body,
+    image: imageUrl,
+  });
 
   res.status(201).json(
     new ApiResponse(
@@ -45,9 +59,21 @@ const getProductById = asyncHandler(async (req, res) => {
 
 // Update Product
 const updateProduct = asyncHandler(async (req, res) => {
+  let productData = {
+    ...req.body,
+  };
+
+  if (req.file) {
+    const uploadedImage = await uploadToCloudinary(
+      req.file.buffer
+    );
+
+    productData.image = uploadedImage.secure_url;
+  }
+
   const product = await productService.updateProduct(
     req.params.id,
-    req.body
+    productData
   );
 
   res.status(200).json(

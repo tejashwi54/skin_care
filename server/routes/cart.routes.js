@@ -5,6 +5,12 @@ const router = express.Router();
 const cartController = require("../controllers/cart.controller");
 
 const { protect } = require("../middlewares/auth.middleware");
+const validate = require("../middlewares/validate.middleware");
+const {
+  addToCartValidator,
+  cartProductIdValidator,
+  updateCartQuantityValidator,
+} = require("../validators/cart.validator");
 
 // Get Cart
 router.get(
@@ -17,6 +23,8 @@ router.get(
 router.post(
   "/",
   protect,
+  addToCartValidator,
+  validate,
   cartController.addToCart
 );
 
@@ -24,6 +32,8 @@ router.post(
 router.put(
   "/:productId",
   protect,
+  updateCartQuantityValidator,
+  validate,
   cartController.updateQuantity
 );
 
@@ -31,6 +41,8 @@ router.put(
 router.delete(
   "/:productId",
   protect,
+  cartProductIdValidator,
+  validate,
   cartController.removeProduct
 );
 

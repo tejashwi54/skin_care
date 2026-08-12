@@ -45,29 +45,28 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    passwordResetToken: {
+      type: String,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+    },
+
+    emailVerificationToken: {
+      type: String,
+    },
+
+    emailVerificationExpires: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-<<<<<<< HEAD
-// ==============================
-// Additional Database Indexes
-// ==============================
-
-// Fast role lookup
-userSchema.index({ role: 1 });
-
-// Latest users
-userSchema.index({ createdAt: -1 });
-
-// ==============================
-// Hash Password Before Save
-// ==============================
-=======
-// Hash password before saving
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) {
     return;
@@ -76,18 +75,9 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 10);
 });
 
-<<<<<<< HEAD
-// ==============================
-// Compare Password
-// ==============================
-=======
 // Compare password
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 userSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(
-    enteredPassword,
-    this.password
-  );
+  return bcrypt.compare(enteredPassword, this.password);
 };
 
 module.exports = mongoose.model("User", userSchema);

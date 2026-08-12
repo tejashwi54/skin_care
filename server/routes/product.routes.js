@@ -4,21 +4,28 @@ const router = express.Router();
 
 const productController = require("../controllers/product.controller");
 
-<<<<<<< HEAD
 const { protect } = require("../middlewares/auth.middleware");
+
 const authorize = require("../middlewares/role.middleware");
+
 const validate = require("../middlewares/validate.middleware");
 
+const upload = require("../middlewares/upload.middleware");
+
 const {
-  productValidator,
+  createProductValidator,
+  updateProductValidator,
+  productIdValidator,
+  productQueryValidator,
 } = require("../validators/product.validator");
 
 // Create Product
 router.post(
   "/",
   protect,
-  authorize("admin"),
-  productValidator,
+  authorize(["admin"]),
+  upload.single("image"),
+  createProductValidator,
   validate,
   productController.createProduct
 );
@@ -26,12 +33,16 @@ router.post(
 // Get All Products
 router.get(
   "/",
+  productQueryValidator,
+  validate,
   productController.getAllProducts
 );
 
-// Get Product By ID
+// Get Single Product
 router.get(
   "/:id",
+  productIdValidator,
+  validate,
   productController.getProductById
 );
 
@@ -39,8 +50,10 @@ router.get(
 router.put(
   "/:id",
   protect,
-  authorize("admin"),
-  productValidator,
+  authorize(["admin"]),
+  upload.single("image"),
+  productIdValidator,
+  updateProductValidator,
   validate,
   productController.updateProduct
 );
@@ -49,24 +62,11 @@ router.put(
 router.delete(
   "/:id",
   protect,
-  authorize("admin"),
+  authorize(["admin"]),
+  productIdValidator,
+  validate,
   productController.deleteProduct
 );
-=======
-// Create Product
-router.post("/", productController.createProduct);
-
-// Get All Products
-router.get("/", productController.getAllProducts);
-
-// Get Single Product
-router.get("/:id", productController.getProductById);
-
-// Update Product
-router.put("/:id", productController.updateProduct);
-
-// Delete Product
-router.delete("/:id", productController.deleteProduct);
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
 module.exports = router;
+

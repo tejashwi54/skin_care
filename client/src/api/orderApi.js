@@ -25,6 +25,7 @@ export const getOrderById = async (id) => {
   return response.data;
 };
 
+
 export const cancelOrder = async (id) => {
   const response = await axiosInstance.put(
     `/orders/${id}/cancel`
@@ -32,3 +33,24 @@ export const cancelOrder = async (id) => {
 
   return response.data;
 };
+
+
+export const getAllOrders = async () => {
+  const response = await axiosInstance.get(
+    "/orders"
+  );
+
+  return response.data;
+};
+
+export const updateOrderStatus = async (id, status) => {
+  const response = await axiosInstance.put(
+    `/orders/${id}/status`,
+    {
+      status: status,
+    }
+  );
+
+  return response.data;
+};
+

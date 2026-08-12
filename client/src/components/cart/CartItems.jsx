@@ -1,6 +1,7 @@
 import { useCart } from "../../context/CartContext";
 import CartItem from "./CartItem";
 import EmptyCart from "./EmptyCart";
+import { getId } from "../../utils/getId";
 
 const CartItems = () => {
   const { cartItems } = useCart();
@@ -13,7 +14,7 @@ const CartItems = () => {
     <div className="bg-white rounded-[32px] shadow-sm p-6">
       {cartItems.map((item) => (
         <CartItem
-          key={item._id}
+          key={getId(item)}
           item={item}
         />
       ))}

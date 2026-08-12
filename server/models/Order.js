@@ -30,58 +30,16 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
           default: 1,
-<<<<<<< HEAD
-          min: 1,
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         },
 
         price: {
           type: Number,
           required: true,
-<<<<<<< HEAD
-          min: 0,
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         },
       },
     ],
 
     shippingAddress: {
-<<<<<<< HEAD
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
-      email: {
-        type: String,
-        required: true,
-      },
-      phone: {
-        type: String,
-        required: true,
-      },
-      address: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      state: {
-        type: String,
-        required: true,
-      },
-      pinCode: {
-        type: String,
-        required: true,
-      },
-=======
       firstName: String,
       lastName: String,
       email: String,
@@ -90,7 +48,6 @@ const orderSchema = new mongoose.Schema(
       city: String,
       state: String,
       pinCode: String,
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     },
 
     paymentMethod: {
@@ -99,42 +56,19 @@ const orderSchema = new mongoose.Schema(
       default: "COD",
     },
 
-<<<<<<< HEAD
-    itemsPrice: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-=======
     itemsPrice: Number,
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
     shippingPrice: {
       type: Number,
       default: 0,
-<<<<<<< HEAD
-      min: 0,
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     },
 
     discount: {
       type: Number,
       default: 0,
-<<<<<<< HEAD
-      min: 0,
-    },
-
-    totalPrice: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-=======
     },
 
     totalPrice: Number,
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 
     orderStatus: {
       type: String,
@@ -162,28 +96,9 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-<<<<<<< HEAD
-// ==============================
-// Database Indexes
-// ==============================
-
-// User order history
-orderSchema.index({ user: 1 });
-
-// Order status filtering
-orderSchema.index({ orderStatus: 1 });
-
-// Latest orders
+orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ createdAt: -1 });
 
-// User + latest orders
-orderSchema.index({ user: 1, createdAt: -1 });
-
-// Paid orders
-orderSchema.index({ isPaid: 1 });
-
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 module.exports = mongoose.model(
   "Order",
   orderSchema

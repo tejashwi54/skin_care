@@ -2,7 +2,6 @@ const express = require("express");
 
 const router = express.Router();
 
-// Controllers
 const {
   placeOrder,
   getMyOrders,
@@ -10,27 +9,20 @@ const {
   cancelOrder,
   getAllOrders,
   updateOrderStatus,
+  getBestSellingProducts,
 } = require("../controllers/order.controller");
 
-// Middlewares
 const { protect } = require("../middlewares/auth.middleware");
 const authorize = require("../middlewares/role.middleware");
-// Auth Middleware
-const { protect } = require("../middlewares/auth.middleware");
 
-// Validation Middleware
 const validate = require("../middlewares/validate.middleware");
 
-// Validators
 const {
   validatePlaceOrder,
+  orderIdValidator,
+  updateOrderStatusValidator,
 } = require("../validators/order.validator");
 
-// ======================================
-// USER ROUTES
-// ======================================
-
-// Place Order
 router.post(
   "/",
   protect,
@@ -39,44 +31,46 @@ router.post(
   placeOrder
 );
 
-// Get Logged In User Orders
 router.get(
   "/my-orders",
   protect,
   getMyOrders
 );
 
-// Get Single Order
+router.get(
+  "/best-sellers",
+  getBestSellingProducts
+);
+
 router.get(
   "/:id",
   protect,
+  orderIdValidator,
+  validate,
   getOrderById
 );
 
-// Cancel Order
 router.put(
   "/:id/cancel",
   protect,
+  orderIdValidator,
+  validate,
   cancelOrder
 );
 
-// ======================================
-// ADMIN ROUTES
-// ======================================
-
-// Get All Orders
 router.get(
   "/",
   protect,
-  authorize("admin"),
+  authorize(["admin"]),
   getAllOrders
 );
 
-// Update Order Status
 router.put(
   "/:id/status",
   protect,
-  authorize("admin"),
+  authorize(["admin"]),
+  updateOrderStatusValidator,
+  validate,
   updateOrderStatus
 );
 

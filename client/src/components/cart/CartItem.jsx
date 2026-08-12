@@ -16,7 +16,6 @@ const CartItem = ({ item }) => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b py-6">
 
-      {/* Product */}
       <div className="flex items-center gap-5 flex-1">
 
         <img
@@ -43,11 +42,10 @@ const CartItem = ({ item }) => {
 
       </div>
 
-      {/* Quantity */}
       <div className="flex items-center gap-3">
 
         <button
-          onClick={() => decreaseQuantity(item._id)}
+          onClick={() => decreaseQuantity(item)}
           className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition"
         >
           <FaMinus className="mx-auto" />
@@ -58,7 +56,7 @@ const CartItem = ({ item }) => {
         </span>
 
         <button
-          onClick={() => increaseQuantity(item._id)}
+          onClick={() => increaseQuantity(item)}
           className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition"
         >
           <FaPlus className="mx-auto" />
@@ -66,21 +64,16 @@ const CartItem = ({ item }) => {
 
       </div>
 
-      {/* Item Total */}
       <div className="text-2xl font-bold text-green-600">
         ₹{item.price * item.quantity}
       </div>
 
-      {/* Remove */}
       <button
-  onClick={() => {
-    console.log("Deleting:", item._id, item.name);
-    removeFromCart(item._id);
-  }}
-  className="text-red-500 hover:text-red-700 text-xl transition"
->
-  <FaTrash />
-</button>
+        onClick={() => removeFromCart(item)}
+        className="text-red-500 hover:text-red-700 text-xl transition"
+      >
+        <FaTrash />
+      </button>
 
     </div>
   );

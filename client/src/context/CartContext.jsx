@@ -1,276 +1,218 @@
+import { useAuth } from "./AuthContext";
 import {
   createContext,
   useContext,
-<<<<<<< HEAD
   useEffect,
   useState,
 } from "react";
 
 import {
+  addToCart as addCartItem,
+  clearCart as clearPersistedCart,
   getCart,
-  addToCart as addCartApi,
+  removeFromCart as removeCartItem,
   updateCartQuantity,
-  removeFromCart as removeCartApi,
-  clearCart as clearCartApi,
 } from "../api/cartApi";
+
+import { getId } from "../utils/getId";
 
 const CartContext = createContext();
 
+const GUEST_CART_KEY = "cart_guest";
+
+// Get guest cart from localStorage
+const getGuestCart = () => {
+  try {
+    return JSON.parse(localStorage.getItem(GUEST_CART_KEY)) || [];
+  } catch {
+    return [];
+  }
+};
+
 export const CartProvider = ({ children }) => {
+  const { user, loading } = useAuth();
+
   const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  // ===========================
-  // Fetch Cart
-  // ===========================
-  const fetchCart = async () => {
+  // Load cart
+  useEffect(() => {
+    if (loading) return;
+
+    const loadCart = async () => {
+      // Guest user → load cart from localStorage
+      if (!user) {
+        setCartItems(getGuestCart());
+        return;
+      }
+
+      // Logged-in user → load cart from backend
+      try {
+        const response = await getCart();
+
+        setCartItems(response.data.items || []);
+      } catch {
+        setCartItems([]);
+      }
+    };
+
+    loadCart();
+  }, [user, loading]);
+
+  // Save guest cart to localStorage
+  useEffect(() => {
+    if (!user) {
+      localStorage.setItem(
+        GUEST_CART_KEY,
+        JSON.stringify(cartItems)
+      );
+    }
+  }, [cartItems, user]);
+
+  // Common helper for backend cart operations
+  const syncCart = async (request) => {
     try {
-      setLoading(true);
+      const response = await request;
 
-      const response = await getCart();
+      const updatedItems = response.data.items || [];
 
-      setCartItems(response.data.items || []);
-    } catch (error) {
-      console.error("Fetch Cart Error:", error);
-    } finally {
-      setLoading(false);
+      setCartItems(updatedItems);
+
+      return updatedItems;
+    } catch {
+      return null;
     }
   };
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
-=======
-  useState,
-  useEffect,
-} from "react";
-
-const CartContext = createContext();
-
-export const CartProvider = ({ children }) => {
-  // Load Cart From LocalStorage
-  const [cartItems, setCartItems] = useState(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    const cartKey = user ? `cart_${user._id}` : "cart_guest";
-
-    const savedCart = localStorage.getItem(cartKey);
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-
-  // Save Cart To LocalStorage
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-
-const cartKey = user ? `cart_${user._id}` : "cart_guest";
-
-localStorage.setItem(
-  cartKey,
-  JSON.stringify(cartItems)
-);
-  }, [cartItems]);
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
-
-  // ===========================
-  // Add To Cart
-  // ===========================
-<<<<<<< HEAD
-  const addToCart = async (product) => {
-    try {
-      const response = await addCartApi(
-        product._id,
-        1
+  // Add product to cart
+  const addToCart = async (product, quantity = 1) => {
+    if (user) {
+      return syncCart(
+        addCartItem(getId(product), quantity)
       );
-
-      setCartItems(response.data.items);
-
-    } catch (error) {
-      console.error(error);
     }
-=======
-  const addToCart = (product) => {
-    setCartItems((prevItems) => {
-      const existingProduct = prevItems.find(
-        (item) => item._id === product._id
+
+    // Guest user → localStorage cart
+    setCartItems((previousItems) => {
+      const existingProduct = previousItems.find(
+        (item) => getId(item) === getId(product)
       );
 
       if (existingProduct) {
-        return prevItems.map((item) =>
-          item._id === product._id
+        return previousItems.map((item) =>
+          getId(item) === getId(product)
             ? {
                 ...item,
-                quantity: item.quantity + 1,
+                quantity: item.quantity + quantity,
               }
             : item
         );
       }
 
       return [
-        ...prevItems,
+        ...previousItems,
         {
           ...product,
-          quantity: 1,
+          quantity,
         },
       ];
     });
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
+
+    return null;
   };
 
-  // ===========================
-  // Remove Item
-  // ===========================
-<<<<<<< HEAD
-  const removeFromCart = async (id) => {
-    try {
-      const response =
-        await removeCartApi(id);
-
-      setCartItems(response.data.items);
-
-    } catch (error) {
-      console.error(error);
+  // Remove product from cart
+  const removeFromCart = async (product) => {
+    if (user) {
+      return syncCart(
+        removeCartItem(getId(product))
+      );
     }
+
+    // Guest user → local cart
+    setCartItems((previousItems) =>
+      previousItems.filter(
+        (item) => getId(item) !== getId(product)
+      )
+    );
+
+    return null;
   };
-=======
-  const removeFromCart = (id) => {
-  console.log("Remove ID:", id);
 
-  setCartItems((prevItems) => {
-    console.log("Before:", prevItems);
-
-    const updated = prevItems.filter(
-      (item) => item._id !== id
-    );
-
-    console.log("After:", updated);
-
-    return updated;
-  });
-};
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
-
-  // ===========================
-  // Increase Quantity
-  // ===========================
-<<<<<<< HEAD
-  const increaseQuantity = async (id) => {
-
-    const item = cartItems.find(
-      (item) => item._id === id
-    );
-
-    if (!item) return;
-
-    try {
-
-      const response =
-        await updateCartQuantity(
-          id,
-          item.quantity + 1
-        );
-
-      setCartItems(response.data.items);
-
-    } catch (error) {
-      console.error(error);
+  // Update product quantity
+  const updateQuantity = async (product, quantity) => {
+    if (quantity < 1) {
+      return removeFromCart(product);
     }
-=======
-  const increaseQuantity = (id) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item._id === id
+
+    if (user) {
+      return syncCart(
+        updateCartQuantity(
+          getId(product),
+          quantity
+        )
+      );
+    }
+
+    // Guest user → local cart
+    setCartItems((previousItems) =>
+      previousItems.map((item) =>
+        getId(item) === getId(product)
           ? {
               ...item,
-              quantity: item.quantity + 1,
+              quantity,
             }
           : item
       )
     );
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
+
+    return null;
   };
 
-  // ===========================
-  // Decrease Quantity
-  // ===========================
-<<<<<<< HEAD
-  const decreaseQuantity = async (id) => {
-
-    const item = cartItems.find(
-      (item) => item._id === id
+  // Increase quantity
+  const increaseQuantity = (product) => {
+    return updateQuantity(
+      product,
+      product.quantity + 1
     );
-
-    if (!item) return;
-
-    if (item.quantity === 1) {
-      return removeFromCart(id);
-    }
-
-    try {
-
-      const response =
-        await updateCartQuantity(
-          id,
-          item.quantity - 1
-        );
-
-      setCartItems(response.data.items);
-
-    } catch (error) {
-      console.error(error);
-    }
-=======
-  const decreaseQuantity = (id) => {
-    setCartItems((prevItems) =>
-      prevItems
-        .map((item) =>
-          item._id === id
-            ? {
-                ...item,
-                quantity: item.quantity - 1,
-              }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
   };
 
-  // ===========================
-  // Clear Cart
-  // ===========================
-<<<<<<< HEAD
+  // Decrease quantity
+  const decreaseQuantity = (product) => {
+    if (product.quantity === 1) {
+      return removeFromCart(product);
+    }
+
+    return updateQuantity(
+      product,
+      product.quantity - 1
+    );
+  };
+
+  // Clear cart
   const clearCart = async () => {
-
-    try {
-
-      await clearCartApi();
-
-      setCartItems([]);
-
-    } catch (error) {
-      console.error(error);
+    if (user) {
+      return syncCart(clearPersistedCart());
     }
-=======
-  const clearCart = () => {
+
+    // Guest user → clear local cart
     setCartItems([]);
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
+
+    return null;
   };
 
-  // ===========================
-  // Cart Total
-  // ===========================
+  // Total cart price
   const cartTotal = cartItems.reduce(
     (total, item) =>
-      total + item.price * item.quantity,
+      total +
+      Number(item.price || 0) *
+        Number(item.quantity || 0),
     0
   );
 
-  // ===========================
-  // Total Items
-  // ===========================
+  // Total number of items
   const totalItems = cartItems.reduce(
     (total, item) =>
-      total + item.quantity,
+      total + Number(item.quantity || 0),
     0
   );
 
@@ -278,19 +220,12 @@ localStorage.setItem(
     <CartContext.Provider
       value={{
         cartItems,
-<<<<<<< HEAD
-        loading,
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         addToCart,
         removeFromCart,
+        updateQuantity,
         increaseQuantity,
         decreaseQuantity,
         clearCart,
-<<<<<<< HEAD
-        fetchCart,
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         cartTotal,
         totalItems,
       }}
@@ -300,5 +235,7 @@ localStorage.setItem(
   );
 };
 
-export const useCart = () =>
-  useContext(CartContext);
+export const useCart = () => {
+  return useContext(CartContext);
+};
+

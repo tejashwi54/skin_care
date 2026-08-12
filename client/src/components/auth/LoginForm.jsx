@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { loginUser } from "../../api/authApi";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
@@ -32,37 +34,26 @@ const LoginForm = () => {
     try {
       setLoading(true);
 
-      const response = await loginUser(formData);
+      await login(formData);
 
-      toast.success(response.message);
+      toast.success("Login Successful");
 
-<<<<<<< HEAD
-      // Redirect after successful login
-      navigate("/dashboard");
-
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-        "Login Failed"
-      );
-=======
-      window.location.href = "/dashboard";
+      navigate("/dashboard", {
+        replace: true,
+      });
 
     } catch (error) {
-
       toast.error(
         error.response?.data?.message ||
           "Login Failed"
       );
-
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-[32px] shadow-lg p-10">
+    <div className="bg-white rounded-3xl shadow-xl p-10">
 
       <p className="uppercase tracking-[4px] text-green-600 font-semibold">
         Welcome Back
@@ -80,10 +71,6 @@ const LoginForm = () => {
         onSubmit={handleSubmit}
         className="mt-8 space-y-5"
       >
-<<<<<<< HEAD
-=======
-
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
         <input
           type="email"
           name="email"
@@ -105,18 +92,11 @@ const LoginForm = () => {
         <button
           type="submit"
           disabled={loading}
-<<<<<<< HEAD
-          className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold transition disabled:opacity-60"
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-=======
           className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold transition"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
 
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
       </form>
 
       <p className="text-center mt-6 text-gray-500">

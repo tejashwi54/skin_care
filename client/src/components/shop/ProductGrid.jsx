@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getAllProducts } from "../../api/productApi";
 import ProductCard from "../common/ProductCard";
 import SkeletonCard from "../common/SkeletonCard";
+import { getId } from "../../utils/getId";
 
 const ProductGrid = ({
   search = "",
@@ -12,8 +13,17 @@ const ProductGrid = ({
   const [sort, setSort] = useState("featured");
   const [loading, setLoading] = useState(true);
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const PRODUCTS_PER_PAGE = 4;
+
   useEffect(() => {
     fetchProducts();
+  }, [search, category, type, page]);
+
+  useEffect(() => {
+    setPage(1);
   }, [search, category, type]);
 
   const fetchProducts = async () => {
@@ -28,9 +38,15 @@ const ProductGrid = ({
         params.category = category;
       }
 
-      const response = await getAllProducts(params);
+      const response = await getAllProducts({
+        ...params,
+        page,
+        limit: PRODUCTS_PER_PAGE,
+      });
 
-      let fetchedProducts = response.data.products;
+      let fetchedProducts = response.data.products || [];
+
+      setTotalPages(response.data.totalPages || 1);
 
       if (type === "bestseller") {
         fetchedProducts = fetchedProducts.filter(
@@ -87,8 +103,8 @@ const ProductGrid = ({
   return (
     <>
       {/* Top Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
 
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
         <div>
           <h2 className="text-3xl font-bold">
             {type === "bestseller"
@@ -112,23 +128,66 @@ const ProductGrid = ({
           <option value="high">Price: High to Low</option>
           <option value="rating">Highest Rated</option>
         </select>
-
       </div>
 
       {sortedProducts.length > 0 ? (
-        <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+        <>
+          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+            {sortedProducts.map((product) => (
+              <ProductCard
+                key={getId(product)}
+                product={product}
+              />
+            ))}
+          </div>
 
-          {sortedProducts.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-            />
-          ))}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-3 mt-10">
+              <button
+                onClick={() => setPage((prev) => prev - 1)}
+                disabled={page === 1}
+                className={`px-4 py-2 rounded-lg border transition ${
+                  page === 1
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-green-500 hover:text-white"
+                }`}
+              >
+                Previous
+              </button>
 
-        </div>
+              {Array.from(
+                { length: totalPages },
+                (_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => setPage(index + 1)}
+                    className={`w-10 h-10 rounded-lg transition ${
+                      page === index + 1
+                        ? "bg-green-500 text-white"
+                        : "border hover:bg-gray-100"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                )
+              )}
+
+              <button
+                onClick={() => setPage((prev) => prev + 1)}
+                disabled={page === totalPages}
+                className={`px-4 py-2 rounded-lg border transition ${
+                  page === totalPages
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-green-500 hover:text-white"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="bg-white rounded-3xl shadow-md py-24 text-center">
-
           <h2 className="text-3xl font-bold">
             No Products Found
           </h2>
@@ -136,7 +195,6 @@ const ProductGrid = ({
           <p className="text-gray-500 mt-3">
             Try another filter.
           </p>
-
         </div>
       )}
     </>
@@ -144,3 +202,4 @@ const ProductGrid = ({
 };
 
 export default ProductGrid;
+

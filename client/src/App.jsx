@@ -13,14 +13,15 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import OrderSuccess from "./pages/OrderSuccess";
+import MyOrders from "./pages/MyOrders";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import MyOrders from "./pages/MyOrders";
 
 function App() {
   return (
     <Routes>
       {/* Public Routes */}
+
       <Route path="/" element={<Home />} />
 
       <Route path="/shop" element={<Shop />} />
@@ -80,6 +81,15 @@ function App() {
       />
 
       <Route
+        path="/my-orders"
+        element={
+          <ProtectedRoute>
+            <MyOrders />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/order-success"
         element={
           <ProtectedRoute>
@@ -91,17 +101,8 @@ function App() {
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
-    
   );
 }
 
-<Route
-  path="/my-orders"
-  element={
-    <ProtectedRoute>
-      <MyOrders />
-    </ProtectedRoute>
-  }
-/>
-
 export default App;
+

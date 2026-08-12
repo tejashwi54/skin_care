@@ -48,20 +48,11 @@ const productSchema = new mongoose.Schema(
     rating: {
       type: Number,
       default: 5,
-<<<<<<< HEAD
-      min: 0,
-      max: 5,
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     },
 
     reviews: {
       type: Number,
       default: 0,
-<<<<<<< HEAD
-      min: 0,
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
     },
 
     badge: {
@@ -74,31 +65,18 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-<<<<<<< HEAD
-// ==============================
-// Database Indexes
-// ==============================
-
-// Search by category
 productSchema.index({ category: 1 });
 
-// Featured products
-productSchema.index({ featured: 1 });
+productSchema.index({
+  featured: 1,
+  createdAt: -1,
+});
 
-// Price sorting/filtering
-productSchema.index({ price: 1 });
+productSchema.index({
+  name: "text",
+  description: "text",
+});
 
-// Rating sorting
-productSchema.index({ rating: -1 });
-
-// Latest products
-productSchema.index({ createdAt: -1 });
-
-// Search by name
-productSchema.index({ name: "text" });
-
-=======
->>>>>>> 4297b140f2a3977b2f58d6d7afeb664198ab37df
 module.exports = mongoose.model(
   "Product",
   productSchema

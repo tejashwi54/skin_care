@@ -12,6 +12,17 @@ import {
 import { useCart } from "../../context/CartContext";
 import SearchModal from "../common/SearchModal";
 
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Shop", path: "/shop" },
+  {
+    name: "Best Sellers",
+    path: "/shop?type=bestseller",
+  },
+  { name: "About", path: "/about" },
+  { name: "Contact", path: "/contact" },
+];
+
 const Navbar = () => {
   const { totalItems } = useCart();
 
@@ -30,17 +41,6 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    {
-      name: "Best Sellers",
-      path: "/shop?type=bestseller",
-    },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
-  ];
-
   return (
     <>
       <header
@@ -50,8 +50,7 @@ const Navbar = () => {
             : "bg-white/90 backdrop-blur-lg"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
@@ -81,9 +80,10 @@ const Navbar = () => {
 
           {/* Desktop Icons */}
           <div className="hidden lg:flex items-center gap-6">
-
             {/* Search */}
             <button
+              type="button"
+              aria-label="Open Search"
               onClick={() => setSearchOpen(true)}
               className="hover:text-green-600 transition"
             >
@@ -119,15 +119,17 @@ const Navbar = () => {
             >
               <FiUser size={24} />
             </Link>
-
           </div>
 
           {/* Mobile Menu Button */}
+          
           <button
+            type="button"
+            aria-label="Toggle Menu"
             className="lg:hidden text-3xl"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <FiX /> : <FiMenu />}
+            onClick={() => setMenuOpen((prev) => !prev)}
+            >
+          {menuOpen ? <FiX /> : <FiMenu />}
           </button>
 
         </div>
@@ -135,9 +137,7 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="lg:hidden bg-white shadow-md">
-
             <div className="flex flex-col p-6 gap-5">
-
               {navLinks.map((item) => (
                 <NavLink
                   key={item.name}
@@ -154,9 +154,10 @@ const Navbar = () => {
               ))}
 
               <div className="flex items-center gap-6 pt-4">
-
                 {/* Search */}
                 <button
+                  type="button"
+                  aria-label="Open Search"
                   onClick={() => {
                     setSearchOpen(true);
                     setMenuOpen(false);
@@ -190,16 +191,14 @@ const Navbar = () => {
 
                 {/* Dashboard */}
                 <Link
-  to="/dashboard"
-  className="hover:text-green-600 transition"
->
-  <FiUser size={24} />
-</Link>
-
+                  to="/dashboard"
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-green-600 transition"
+                >
+                  <FiUser size={22} />
+                </Link>
               </div>
-
             </div>
-
           </div>
         )}
       </header>
@@ -213,3 +212,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

@@ -1,13 +1,12 @@
 const ApiError = require("../utils/ApiError");
 const cartRepository = require("../repositories/cart.repository");
+const productRepository = require("../repositories/product.repository");
 
-// ==============================
-// Format Cart For Frontend
-// ==============================
-const formatCart = (cart) => {
-  return {
-    ...cart.toObject(),
-    items: cart.items.map((item) => ({
+const formatCart = (cart) => ({
+  ...cart.toObject(),
+  items: cart.items
+    .filter((item) => item.product)
+    .map((item) => ({
       _id: item.product._id,
       name: item.product.name,
       image: item.product.image,
@@ -17,70 +16,41 @@ const formatCart = (cart) => {
       stock: item.product.stock,
       quantity: item.quantity,
     })),
-  };
-};
+});
 
-// ==============================
-// Get User Cart
-// ==============================
+const getOrCreateCart = (userId) =>
+  cartRepository.getOrCreateCartByUser(userId);
+
 const getCart = async (userId) => {
-  let cart = await cartRepository.getCartByUser(userId);
-
-  if (!cart) {
-    cart = await cartRepository.createCart({
-      user: userId,
-      items: [],
-    });
-
-    cart = await cartRepository.getCartByUser(userId);
-  }
-
+  const cart = await getOrCreateCart(userId);
   return formatCart(cart);
 };
 
-// ==============================
-// Add Product
-// ==============================
 const addToCart = async (userId, productId, quantity = 1) => {
-  let cart = await cartRepository.getCartByUser(userId);
+  const product = await productRepository.getProductById(productId);
 
-  if (!cart) {
-    cart = await cartRepository.createCart({
-      user: userId,
-      items: [],
-    });
-
-    cart = await cartRepository.getCartByUser(userId);
+  if (!product) {
+    throw new ApiError(404, "Product not found");
   }
 
+  let cart = await getOrCreateCart(userId);
   const item = cart.items.find(
-    (i) => i.product._id.toString() === productId
+    (cartItem) => cartItem.product._id.toString() === productId
   );
 
   if (item) {
     item.quantity += quantity;
   } else {
-    cart.items.push({
-      product: productId,
-      quantity,
-    });
+    cart.items.push({ product: productId, quantity });
   }
 
   await cartRepository.saveCart(cart);
-
   cart = await cartRepository.getCartByUser(userId);
 
   return formatCart(cart);
 };
 
-// ==============================
-// Update Quantity
-// ==============================
-const updateQuantity = async (
-  userId,
-  productId,
-  quantity
-) => {
+const updateQuantity = async (userId, productId, quantity) => {
   const cart = await cartRepository.getCartByUser(userId);
 
   if (!cart) {
@@ -88,7 +58,7 @@ const updateQuantity = async (
   }
 
   const item = cart.items.find(
-    (i) => i.product._id.toString() === productId
+    (cartItem) => cartItem.product._id.toString() === productId
   );
 
   if (!item) {
@@ -96,21 +66,12 @@ const updateQuantity = async (
   }
 
   item.quantity = quantity;
-
   await cartRepository.saveCart(cart);
 
-  const updatedCart = await cartRepository.getCartByUser(userId);
-
-  return formatCart(updatedCart);
+  return formatCart(await cartRepository.getCartByUser(userId));
 };
 
-// ==============================
-// Remove Product
-// ==============================
-const removeProduct = async (
-  userId,
-  productId
-) => {
+const removeProduct = async (userId, productId) => {
   const cart = await cartRepository.getCartByUser(userId);
 
   if (!cart) {
@@ -118,34 +79,20 @@ const removeProduct = async (
   }
 
   cart.items = cart.items.filter(
-    (item) =>
-      item.product._id.toString() !== productId
+    (item) => item.product._id.toString() !== productId
   );
-
   await cartRepository.saveCart(cart);
 
-  const updatedCart = await cartRepository.getCartByUser(userId);
-
-  return formatCart(updatedCart);
+  return formatCart(await cartRepository.getCartByUser(userId));
 };
 
-// ==============================
-// Clear Cart
-// ==============================
 const clearCart = async (userId) => {
-  const cart = await cartRepository.getCartByUser(userId);
-
-  if (!cart) {
-    throw new ApiError(404, "Cart not found");
-  }
+  const cart = await getOrCreateCart(userId);
 
   cart.items = [];
-
   await cartRepository.saveCart(cart);
 
-  const updatedCart = await cartRepository.getCartByUser(userId);
-
-  return formatCart(updatedCart);
+  return formatCart(await cartRepository.getCartByUser(userId));
 };
 
 module.exports = {

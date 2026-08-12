@@ -1,237 +1,107 @@
-const Order = require("../models/Order");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiResponse = require("../utils/ApiResponse");
+const orderService = require("../services/order.service");
 
-// ==========================================
-// Place Order
-// ==========================================
-const placeOrder = async (req, res) => {
-  try {
-    const {
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      shippingPrice,
-      discount,
-      totalPrice,
-    } = req.body;
+const placeOrder = asyncHandler(async (req, res) => {
+  const order = await orderService.placeOrder(
+    req.user._id,
+    req.body
+  );
 
-    if (!orderItems || orderItems.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "No order items found",
-      });
-    }
+  res.status(201).json(
+    new ApiResponse(
+      201,
+      "Order placed successfully",
+      order
+    )
+  );
+});
 
-    const order = await Order.create({
-      user: req.user._id,
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      shippingPrice,
-      discount,
-      totalPrice,
-    });
+const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await orderService.getMyOrders(
+    req.user._id
+  );
 
-    res.status(201).json({
-      success: true,
-      message: "Order placed successfully",
-      data: order,
-    });
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Orders fetched successfully",
+      orders
+    )
+  );
+});
 
-  } catch (error) {
+const getOrderById = asyncHandler(async (req, res) => {
+  const order = await orderService.getOrderById(
+    req.params.id,
+    req.user._id
+  );
 
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Order fetched successfully",
+      order
+    )
+  );
+});
 
-  }
-};
+const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await orderService.cancelOrder(
+    req.params.id,
+    req.user._id
+  );
 
-// ==========================================
-// Get My Orders
-// ==========================================
-const getMyOrders = async (req, res) => {
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Order cancelled successfully",
+      order
+    )
+  );
+});
 
-  try {
+const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await orderService.getAllOrders();
 
-    const orders = await Order.find({
-      user: req.user._id,
-    }).sort({
-      createdAt: -1,
-    });
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Orders fetched successfully",
+      orders
+    )
+  );
+});
 
-    res.status(200).json({
-      success: true,
-      data: orders,
-    });
+const getBestSellingProducts = asyncHandler(
+  async (req, res) => {
+    const products =
+      await orderService.getBestSellingProducts();
 
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-
-};
-
-// ==========================================
-// Get Order By Id
-// ==========================================
-const getOrderById = async (req, res) => {
-
-  try {
-
-    const order = await Order.findById(
-      req.params.id
-    ).populate(
-      "user",
-      "name email"
+    res.status(200).json(
+      new ApiResponse(
+        200,
+        "Best selling products fetched successfully",
+        products
+      )
     );
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: order,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
   }
+);
 
-};
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  const order = await orderService.updateOrderStatus(
+    req.params.id,
+    req.body.status
+  );
 
-// ==========================================
-// Cancel Order
-// ==========================================
-const cancelOrder = async (req, res) => {
-
-  try {
-
-    const order = await Order.findById(
-      req.params.id
-    );
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    order.orderStatus = "Cancelled";
-
-    await order.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Order cancelled successfully",
-      data: order,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-
-};
-
-// ==========================================
-// Admin - Get All Orders
-// ==========================================
-const getAllOrders = async (req, res) => {
-
-  try {
-
-    const orders = await Order.find()
-      .populate("user", "name email")
-      .sort({
-        createdAt: -1,
-      });
-
-    res.status(200).json({
-      success: true,
-      data: orders,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-
-};
-
-// ==========================================
-// Admin - Update Status
-// ==========================================
-const updateOrderStatus = async (
-  req,
-  res
-) => {
-
-  try {
-
-    const order = await Order.findById(
-      req.params.id
-    );
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    order.orderStatus =
-      req.body.status;
-
-    if (
-      req.body.status === "Delivered"
-    ) {
-      order.deliveredAt =
-        Date.now();
-    }
-
-    await order.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Order status updated",
-      data: order,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
-
-};
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Order status updated",
+      order
+    )
+  );
+});
 
 module.exports = {
   placeOrder,
@@ -240,4 +110,5 @@ module.exports = {
   cancelOrder,
   getAllOrders,
   updateOrderStatus,
+  getBestSellingProducts,
 };

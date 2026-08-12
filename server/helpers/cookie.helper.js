@@ -5,4 +5,13 @@ const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
-module.exports = cookieOptions;
+const clearCookieOptions = {
+  httpOnly: cookieOptions.httpOnly,
+  secure: cookieOptions.secure,
+  sameSite: cookieOptions.sameSite,
+};
+
+module.exports = {
+  cookieOptions,
+  clearCookieOptions,
+};
