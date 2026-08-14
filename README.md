@@ -1,15 +1,15 @@
-# 🌿 Clear Skin - MERN Stack E-commerce Website
+# 🌿 Clear Skin — MERN Stack E-commerce Website
 
-A modern and responsive **MERN Stack E-commerce Website** for skincare products. The application provides a complete online shopping experience with secure authentication, product browsing, wishlist, shopping cart, checkout, order management, and user dashboard.
+Clear Skin is a modern and responsive **MERN Stack e-commerce platform** for skincare products. It provides a complete shopping experience with secure authentication, product browsing, wishlist, cart, checkout, order management, and admin operations.
 
-This project was developed as part of an internship with a focus on **clean architecture, responsive UI, security, and user experience**.
+The project was developed as part of an internship with a focus on **clean architecture, security, validation, and responsive user experience**.
 
 ---
 
-# 🚀 Tech Stack
+## 🚀 Tech Stack
 
-## Frontend
-- React.js (Vite)
+### Frontend
+- React.js + Vite
 - React Router DOM
 - Tailwind CSS
 - Axios
@@ -18,121 +18,152 @@ This project was developed as part of an internship with a focus on **clean arch
 - React Hot Toast
 - React Icons
 
-## Backend
+### Backend
 - Node.js
 - Express.js
-- MongoDB Atlas
+- MongoDB
 - Mongoose
-- JWT Authentication
+- JWT
 - bcryptjs
 - Express Validator
 - Helmet
-- Morgan
-- Cookie Parser
 - CORS
+- Cookie Parser
+- Morgan
+- CSRF Protection
+- Nodemailer + Brevo SMTP
+- Swagger / OpenAPI
+- Jest + Supertest
 
 ---
 
-# ✨ Features
+## ✨ Features
 
-## Authentication
-- User Registration
-- User Login
+### 🔐 Authentication
+- User Registration & Login
+- Email Verification using OTP
+- Resend Verification OTP
+- Forgot Password
+- Password Reset using OTP
 - JWT Authentication
-- Password Encryption using bcrypt
+- Secure `httpOnly` Cookie Authentication
 - Protected Routes
+- Role-Based Access Control (RBAC)
+- Admin Authorization
 - Logout
-- Role-Based Authentication
+- Rate Limiting
 - Input Validation
 
----
-
-## Home Page
-
-- Premium Responsive Landing Page
-- Hero Banner
-- Featured Products
-- Categories
-- Best Sellers
-- New Arrivals
-- Testimonials
-- Newsletter Section
-
----
-
-## Product Module
-
-- Product Listing
-- Product Details
+### 🛍️ Products
+- Product Listing & Details
+- Search
 - Category Filtering
-- Responsive Product Cards
+- Price Filtering
+- Sorting
+- Pagination
+- Featured Products
+- Best Sellers
+- Product CRUD for Admin
+- Product Validation
 
----
+### 🛒 Cart & Wishlist
+- Add / Remove Products
+- Increase / Decrease Quantity
+- Persistent Database Cart for Logged-in Users
+- Guest Cart using localStorage
+- Wishlist Management
+- Move Wishlist Products to Cart
 
-## Shopping Cart
-
-- Add to Cart
-- Remove from Cart
-- Increase Quantity
-- Decrease Quantity
-- Dynamic Order Summary
-- Shipping & Discount Calculation
-
----
-
-## Wishlist
-
-- Add to Wishlist
-- Remove from Wishlist
-- Move Product to Cart
-- Dynamic Wishlist
-
----
-
-## Checkout
-
-- Billing Details Form
+### 📦 Orders & Checkout
+- Shipping Address
 - Payment Method Selection
+- Order Placement
 - Order Summary
-- Place Order
-- Order Success Page
-
----
-
-## Orders
-
-- Place Order
 - My Orders
-- View Order Details
-- Cancel Order
+- Order Details
+- Order Cancellation
+- Admin Order Management
+- Order Status Updates
+- Best-Selling Products
+
+### 👨‍💼 Admin
+- Product Management
+- Order Management
+- Update Order Status
+- View All Orders
+- Best-Selling Products
+- Featured Product Management
 
 ---
 
-## Dashboard
+## 🔒 Security
 
-- User Profile
-- Welcome Message with Logged-in User
-- My Orders
-- Logout
-
----
-
-# 🔐 Security Features
-
-- JWT Authentication
-- Password Hashing (bcrypt)
-- Input Validation
-- Protected APIs
-- Environment Variables
-- Helmet Security
-- CORS Protection
-- Centralized Error Handling
+- JWT authentication with `httpOnly` cookies
+- bcrypt password hashing
+- CSRF protection
+- Helmet security headers
+- CORS configuration
+- Authentication rate limiting
+- Express Validator
+- MongoDB schema validation
+- Role-Based Access Control
+- Centralized error handling
+- Environment-based configuration
 
 ---
 
-# 📂 Project Structure
+## 🧱 Backend Architecture
+
+The backend follows a layered architecture:
 
 ```text
+Routes
+  ↓
+Middleware
+  ↓
+Controllers
+  ↓
+Services
+  ↓
+Repositories
+  ↓
+Models
+  ↓
+MongoDB
+
+
+📚 API Documentation
+
+Swagger / OpenAPI documentation is available for the backend.
+
+After starting the server:
+
+http://localhost:5000/api/docs
+
+Main API modules:
+
+Authentication
+Products
+Cart
+Orders
+Dashboard
+Health Check
+🧪 Testing
+
+Automated testing is implemented using Jest and Supertest.
+
+Current test status:
+
+Test Suites: 2 passed
+Tests:       17 passed
+
+Run tests:
+
+cd server
+npm test -- --runInBand
+
+
+📂 Project Structure
 Clear_skin/
 │
 ├── client/
@@ -145,150 +176,105 @@ Clear_skin/
 │   │   ├── services/
 │   │   └── App.jsx
 │   │
-│   └── package.json
-│
 ├── server/
 │   ├── config/
-│   ├── constants/
 │   ├── controllers/
 │   ├── helpers/
 │   ├── middlewares/
 │   ├── models/
 │   ├── repositories/
 │   ├── routes/
+│   ├── seeder/
 │   ├── services/
+│   ├── tests/
 │   ├── utils/
 │   ├── validators/
 │   ├── app.js
-│   ├── server.js
-│   └── package.json
+│   └── server.js
 │
 ├── README.md
 └── .gitignore
-```
 
----
-
-# ⚙️ Installation
-
-## Clone Repository
-
-```bash
+⚙️ Installation
+1. Clone Repository
 git clone https://github.com/tejashwi54/skin_care.git
-```
-
----
-
-## Install Frontend
-
-```bash
+cd skin_care
+2. Frontend
 cd client
 npm install
 npm run dev
-```
 
----
+Frontend:
 
-## Install Backend
+http://localhost:5173
+3. Backend
 
-```bash
+Open another terminal:
+
 cd server
 npm install
 npm run dev
-```
 
----
+Backend:
 
-# 🔐 Environment Variables
+http://localhost:5000
 
-Create a `.env` file inside the **server** directory.
 
-```env
+🔐 Environment Variables
+
+Create a .env file inside the server directory:
+
 PORT=5000
+
 
 MONGO_URI=YOUR_MONGODB_URI
 
-JWT_SECRET=YOUR_SECRET_KEY
+
+JWT_SECRET=YOUR_JWT_SECRET
+
 
 CLIENT_URL=http://localhost:5173
-```
 
----
 
-# 📸 Application Modules
+CSRF_SECRET=YOUR_CSRF_SECRET
 
-- Home
-- Shop
-- Product Details
-- Wishlist
-- Shopping Cart
-- Checkout
-- Order Success
-- Login
-- Register
-- Dashboard
-- My Orders
-- Contact
-- About
 
----
+BREVO_SMTP_HOST=YOUR_BREVO_SMTP_HOST
+BREVO_SMTP_PORT=587
+BREVO_SMTP_USER=YOUR_BREVO_SMTP_USER
+BREVO_SMTP_PASSWORD=YOUR_BREVO_SMTP_PASSWORD
 
-# 🛠 API Modules
 
-### Authentication
+BREVO_FROM_EMAIL=YOUR_VERIFIED_EMAIL
+BREVO_FROM_NAME=Clear Skin
 
-- Register User
-- Login User
-- Logout User
-- Get Current User
+Never commit .env or any file containing secrets to GitHub.
 
-### Products
+🚧 Future Improvements
+Login-time Two-Factor Authentication (2FA)
+Refresh Token Rotation
+Razorpay / Stripe Payment Gateway
+Redis Caching
+Image Optimization
+Integration & E2E Testing
+Error Monitoring with Sentry
+Real-time Order Tracking
+Product Reviews & Ratings
+Advanced Analytics
 
-- Get All Products
-- Get Product By ID
+📌 Project Status
 
-### Orders
+Core e-commerce application completed.
 
-- Place Order
-- Get My Orders
-- Get Order By ID
-- Cancel Order
-- Get All Orders (Admin)
-- Update Order Status
+The project currently includes secure authentication, email verification, password reset, RBAC, product management, persistent cart, wishlist, checkout, order management, admin operations, API validation, CSRF protection, Swagger documentation, automated testing, and responsive UI.
 
----
+👨‍💻 Developer
 
-# 📈 Future Improvements
-
-- Admin Dashboard
-- Razorpay / Stripe Payment Gateway
-- Product Reviews & Ratings
-- Forgot Password
-- Email Verification
-- Cloudinary Image Upload
-- Inventory Management
-- Product Search & Filters
-- Order Tracking
-
----
-
-# 📌 Project Status
-
-✅ **Completed**
-
-The project includes a complete MERN-based e-commerce workflow with authentication, shopping cart, wishlist, checkout, order management, and responsive user interface.
-
----
-
-# 👨‍💻 Developer
-
-**Tejashwi Bharti**
+Tejashwi Bharti
 
 GitHub:
 https://github.com/tejashwi54
 
----
-
-# 📄 License
+📄 License
 
 This project was developed for educational and internship purposes.
