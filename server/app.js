@@ -22,6 +22,9 @@ const orderRoutes = require("./routes/order.routes");
 const cartRoutes = require("./routes/cart.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 
+// Test email route
+const testEmailRoutes = require("./routes/testEmail.routes");
+
 const app = express();
 
 // ==============================
@@ -46,6 +49,11 @@ app.use(
     credentials: true,
   })
 );
+
+// ==============================
+// Dashboard Routes
+// ==============================
+
 app.use("/api/dashboard", dashboardRoutes);
 
 // ==============================
@@ -106,6 +114,12 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 
 app.use("/api/cart", cartRoutes);
+
+// ==============================
+// Test Email Route
+// ==============================
+
+app.use("/api", testEmailRoutes);
 
 // ==============================
 // 404 Handler

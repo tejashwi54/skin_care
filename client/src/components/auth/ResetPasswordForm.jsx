@@ -1,25 +1,34 @@
 import { useState } from "react";
 import {
   Link,
+  useLocation,
   useNavigate,
 } from "react-router-dom";
+
 import toast from "react-hot-toast";
 
-import { registerUser } from "../../api/authApi";
+import {
+  resetPassword,
+} from "../../api/authApi";
 
-const RegisterForm = () => {
+const ResetPasswordForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [loading, setLoading] =
-    useState(false);
+  const email =
+    location.state?.email || "";
+
+  const resetToken =
+    location.state?.resetToken || "";
 
   const [formData, setFormData] =
     useState({
-      name: "",
-      email: "",
       password: "",
       confirmPassword: "",
     });
+
+  const [loading, setLoading] =
+    useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -33,20 +42,20 @@ const RegisterForm = () => {
     e.preventDefault();
 
     const {
-      name,
-      email,
       password,
       confirmPassword,
     } = formData;
 
-    if (
-      !name ||
-      !email ||
-      !password ||
-      !confirmPassword
-    ) {
+    if (!password || !confirmPassword) {
       toast.error(
         "Please fill all fields"
+      );
+      return;
+    }
+
+    if (password.length < 8) {
+      toast.error(
+        "Password must be at least 8 characters"
       );
       return;
     }
@@ -60,13 +69,20 @@ const RegisterForm = () => {
       return;
     }
 
+    if (!resetToken) {
+      toast.error(
+        "Password reset session is invalid. Please start again."
+      );
+      return;
+    }
+
     try {
       setLoading(true);
 
       const response =
-        await registerUser({
-          name,
+        await resetPassword({
           email,
+          resetToken,
           password,
         });
 
@@ -74,37 +90,58 @@ const RegisterForm = () => {
         response.message
       );
 
-      // Go directly to email verification
-      navigate("/verify-email", {
-        state: {
-          email,
-        },
+      navigate("/login", {
+        replace: true,
       });
     } catch (error) {
       toast.error(
         error.response?.data
           ?.message ||
-          "Registration Failed"
+          "Unable to reset password"
       );
     } finally {
       setLoading(false);
     }
   };
 
+  if (!email || !resetToken) {
+    return (
+      <div className="bg-white rounded-[32px] shadow-lg p-10 text-center">
+
+        <h1 className="text-3xl font-bold">
+          Reset Session Expired
+        </h1>
+
+        <p className="text-gray-500 mt-3">
+          Please start the password
+          reset process again.
+        </p>
+
+        <Link
+          to="/forgot-password"
+          className="inline-block mt-6 text-green-600 font-semibold"
+        >
+          Try Again
+        </Link>
+
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-[32px] shadow-lg p-10">
 
       <p className="uppercase tracking-[4px] text-green-600 font-semibold">
-        Create Account
+        Account Recovery
       </p>
 
       <h1 className="text-4xl font-bold mt-3">
-        Register
+        Reset Password
       </h1>
 
       <p className="text-gray-500 mt-3">
-        Join Clear Skin and start
-        your skincare journey.
+        Create a new password for your
+        Clear Skin account.
       </p>
 
       <form
@@ -113,29 +150,11 @@ const RegisterForm = () => {
       >
 
         <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Full Name"
-          className="w-full border border-gray-300 rounded-xl px-5 py-4 outline-none focus:border-green-500"
-        />
-
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email Address"
-          className="w-full border border-gray-300 rounded-xl px-5 py-4 outline-none focus:border-green-500"
-        />
-
-        <input
           type="password"
           name="password"
           value={formData.password}
           onChange={handleChange}
-          placeholder="Password"
+          placeholder="New Password"
           className="w-full border border-gray-300 rounded-xl px-5 py-4 outline-none focus:border-green-500"
         />
 
@@ -146,7 +165,7 @@ const RegisterForm = () => {
             formData.confirmPassword
           }
           onChange={handleChange}
-          placeholder="Confirm Password"
+          placeholder="Confirm New Password"
           className="w-full border border-gray-300 rounded-xl px-5 py-4 outline-none focus:border-green-500"
         />
 
@@ -156,20 +175,18 @@ const RegisterForm = () => {
           className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading
-            ? "Creating Account..."
-            : "Create Account"}
+            ? "Resetting Password..."
+            : "Reset Password"}
         </button>
 
       </form>
 
-      <p className="text-center mt-6 text-gray-500">
-        Already have an account?{" "}
-
+      <p className="text-center mt-6">
         <Link
           to="/login"
-          className="text-green-600 font-semibold"
+          className="text-gray-500 hover:text-green-600"
         >
-          Login
+          Back to Login
         </Link>
       </p>
 
@@ -177,4 +194,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default ResetPasswordForm;

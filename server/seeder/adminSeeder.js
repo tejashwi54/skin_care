@@ -1,37 +1,34 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+
 const User = require("../models/User");
+const logger = require("../utils/logger");
 
 dotenv.config();
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => {
-    console.error("❌ MongoDB Connection Error:", err);
-    process.exit(1);
-  });
-
 const seedAdmin = async () => {
   try {
-    const adminEmail = "admin@clearskin.com";
+    await mongoose.connect(process.env.MONGO_URI);
 
-    // Check if admin already exists
+    logger.info("MongoDB Connected");
+
     const existingAdmin = await User.findOne({
-      email: adminEmail,
+      email: "admin@clearskin.com",
     });
 
     if (existingAdmin) {
-      console.log("⚠️ Admin already exists");
-
-      // Make sure existing account has admin role
       if (existingAdmin.role !== "admin") {
         existingAdmin.role = "admin";
+        existingAdmin.isVerified = true;
+
         await existingAdmin.save();
 
-        console.log("✅ Existing user promoted to admin");
+        logger.info("Existing user promoted to admin");
+      } else {
+        logger.info("Admin already exists");
       }
 
+      await mongoose.disconnect();
       process.exit(0);
     }
 
@@ -43,13 +40,16 @@ const seedAdmin = async () => {
       isVerified: true,
     });
 
-    console.log("✅ Admin Created Successfully");
-    console.log("Email:", admin.email);
-    console.log("Role:", admin.role);
+    logger.info("Admin created successfully");
+    logger.info(`Admin email: ${admin.email}`);
+    logger.info(`Admin role: ${admin.role}`);
 
+    await mongoose.disconnect();
     process.exit(0);
   } catch (error) {
-    console.error("❌ Admin Seeder Error:", error);
+    logger.error(`Admin seeder error: ${error.message}`);
+
+    await mongoose.disconnect();
     process.exit(1);
   }
 };

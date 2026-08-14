@@ -41,24 +41,62 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    // ==============================
+    // Email Verification
+    // ==============================
+
     isVerified: {
       type: Boolean,
       default: false,
     },
 
-    passwordResetToken: {
+    emailVerificationOtpHash: {
       type: String,
     },
 
-    passwordResetExpires: {
+    emailVerificationOtpExpires: {
       type: Date,
     },
 
-    emailVerificationToken: {
+    emailVerificationOtpAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    emailVerificationLastSentAt: {
+      type: Date,
+    },
+
+    // ==============================
+    // Password Reset OTP
+    // ==============================
+
+    passwordResetOtpHash: {
       type: String,
     },
 
-    emailVerificationExpires: {
+    passwordResetOtpExpires: {
+      type: Date,
+    },
+
+    passwordResetOtpAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    passwordResetLastSentAt: {
+      type: Date,
+    },
+
+    // ==============================
+    // Password Reset Authorization
+    // ==============================
+
+    passwordResetTokenHash: {
+      type: String,
+    },
+
+    passwordResetTokenExpires: {
       type: Date,
     },
   },
@@ -67,17 +105,35 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// ==============================
+// Hash Password
+// ==============================
+
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) {
     return;
   }
 
-  this.password = await bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(
+    this.password,
+    10
+  );
 });
 
-// Compare password
-userSchema.methods.comparePassword = async function (enteredPassword) {
-  return bcrypt.compare(enteredPassword, this.password);
+// ==============================
+// Compare Password
+// ==============================
+
+userSchema.methods.comparePassword = async function (
+  enteredPassword
+) {
+  return bcrypt.compare(
+    enteredPassword,
+    this.password
+  );
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model(
+  "User",
+  userSchema
+);

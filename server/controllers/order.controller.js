@@ -2,6 +2,10 @@ const asyncHandler = require("../utils/asyncHandler");
 const ApiResponse = require("../utils/ApiResponse");
 const orderService = require("../services/order.service");
 
+// ==============================
+// Place Order
+// ==============================
+
 const placeOrder = asyncHandler(async (req, res) => {
   const order = await orderService.placeOrder(
     req.user._id,
@@ -17,6 +21,10 @@ const placeOrder = asyncHandler(async (req, res) => {
   );
 });
 
+// ==============================
+// Get My Orders
+// ==============================
+
 const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await orderService.getMyOrders(
     req.user._id
@@ -30,6 +38,10 @@ const getMyOrders = asyncHandler(async (req, res) => {
     )
   );
 });
+
+// ==============================
+// Get Single Order
+// ==============================
 
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await orderService.getOrderById(
@@ -46,6 +58,10 @@ const getOrderById = asyncHandler(async (req, res) => {
   );
 });
 
+// ==============================
+// Cancel Order
+// ==============================
+
 const cancelOrder = asyncHandler(async (req, res) => {
   const order = await orderService.cancelOrder(
     req.params.id,
@@ -61,20 +77,30 @@ const cancelOrder = asyncHandler(async (req, res) => {
   );
 });
 
+// ==============================
+// Get All Orders - Admin
+// ==============================
+
 const getAllOrders = asyncHandler(async (req, res) => {
-  const orders = await orderService.getAllOrders();
+  const result = await orderService.getAllOrders(
+    req.query
+  );
 
   res.status(200).json(
     new ApiResponse(
       200,
       "Orders fetched successfully",
-      orders
+      result
     )
   );
 });
 
-const getBestSellingProducts = asyncHandler(
-  async (req, res) => {
+// ==============================
+// Get Best Selling Products
+// ==============================
+
+const getBestSellingProducts =
+  asyncHandler(async (req, res) => {
     const products =
       await orderService.getBestSellingProducts();
 
@@ -85,23 +111,33 @@ const getBestSellingProducts = asyncHandler(
         products
       )
     );
+  });
+
+// ==============================
+// Update Order Status
+// ==============================
+
+const updateOrderStatus = asyncHandler(
+  async (req, res) => {
+    const order =
+      await orderService.updateOrderStatus(
+        req.params.id,
+        req.body.status
+      );
+
+    res.status(200).json(
+      new ApiResponse(
+        200,
+        "Order status updated",
+        order
+      )
+    );
   }
 );
 
-const updateOrderStatus = asyncHandler(async (req, res) => {
-  const order = await orderService.updateOrderStatus(
-    req.params.id,
-    req.body.status
-  );
-
-  res.status(200).json(
-    new ApiResponse(
-      200,
-      "Order status updated",
-      order
-    )
-  );
-});
+// ==============================
+// Exports
+// ==============================
 
 module.exports = {
   placeOrder,

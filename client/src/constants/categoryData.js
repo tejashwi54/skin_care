@@ -1,38 +1,37 @@
-import facemask from "../assets/images/categories/facemask.jpg";
-import serum from "../assets/images/categories/serum.jpg";
-import moisturizer from "../assets/images/categories/moisturizer.jpg";
-import sunscreen from "../assets/images/categories/sunscreen.jpg";
-import bodywash from "../assets/images/categories/bodywash.jpg";
-
 export const categoryData = [
   {
     id: 1,
     name: "Sunscreen",
     products: 16,
-    image: sunscreen,
+    image:
+      "https://res.cloudinary.com/tc5pypyd/image/upload/v1786536206/sunscreen2.jpg",
   },
   {
     id: 2,
     name: "Serums",
     products: 18,
-    image: serum,
+    image:
+      "https://res.cloudinary.com/tc5pypyd/image/upload/v1786536191/serum.jpg",
   },
   {
     id: 3,
     name: "Moisturizers",
     products: 32,
-    image: moisturizer,
+    image:
+      "https://res.cloudinary.com/tc5pypyd/image/upload/v1786536222/moisturizer.jpg",
   },
   {
     id: 4,
     name: "Face Mask",
     products: 16,
-    image: facemask,
+    image:
+      "https://res.cloudinary.com/tc5pypyd/image/upload/v1786536173/facemask.jpg",
   },
   {
     id: 5,
     name: "Body Wash",
     products: 20,
-    image: bodywash,
+    image:
+      "https://res.cloudinary.com/tc5pypyd/image/upload/v1786536009/bodywash.jpg",
   },
 ];

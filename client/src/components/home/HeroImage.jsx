@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import heroImage from "../../assets/images/hero/hero.png";
 
 const HeroImage = () => {
   return (
@@ -11,7 +10,7 @@ const HeroImage = () => {
     >
       {/* Main Image */}
       <motion.img
-        src={heroImage}
+        src="https://res.cloudinary.com/tc5pypyd/image/upload/v1786536773/hero.jpg"
         alt="Clear Skin Hero"
         animate={{
           y: [0, -12, 0],
