@@ -99,11 +99,31 @@ const userSchema = new mongoose.Schema(
     passwordResetTokenExpires: {
       type: Date,
     },
+
+    // ==============================
+    // Refresh Token Session
+    // ==============================
+
+    refreshTokenHash: {
+      type: String,
+      default: null,
+    },
+
+    refreshTokenExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+// ==============================
+// Database Indexes
+// ==============================
+
+userSchema.index({ email: 1 });
 
 // ==============================
 // Hash Password

@@ -6,9 +6,13 @@ jest.mock("../utils/mailer", () => ({
 }));
 
 // Mock token generation
-jest.mock("../helpers/token.helper", () => {
-  return jest.fn(() => "mock-jwt-token");
-});
+jest.mock("../helpers/token.helper", () => ({
+  generateAccessToken: jest.fn(() => "mock-access-token"),
+  generateRefreshToken: jest.fn(() => "mock-refresh-token"),
+  hashRefreshToken: jest.fn(
+    (token) => `hashed-${token}`
+  ),
+}));
 
 const authService = require("../services/auth.service");
 const authRepository = require("../repositories/auth.repository");
@@ -132,6 +136,8 @@ describe("Auth Service", () => {
       comparePassword: jest
         .fn()
         .mockResolvedValue(passwordMatch),
+
+      save: jest.fn().mockResolvedValue(true),
     });
 
     it("should login a verified user successfully", async () => {
@@ -152,6 +158,8 @@ describe("Auth Service", () => {
         user.comparePassword
       ).toHaveBeenCalledWith("Password@123");
 
+      expect(user.save).toHaveBeenCalled();
+
       expect(result).toEqual({
         user: {
           _id: "user123",
@@ -161,7 +169,10 @@ describe("Auth Service", () => {
           avatar: "",
           isVerified: true,
         },
-        token: "mock-jwt-token",
+
+        accessToken: "mock-access-token",
+
+        refreshToken: "mock-refresh-token",
       });
     });
 
@@ -285,7 +296,10 @@ describe("Auth Service", () => {
           avatar: "",
           isVerified: true,
         },
-        token: "mock-jwt-token",
+
+        accessToken: "mock-access-token",
+
+        refreshToken: "mock-refresh-token",
       });
     });
 

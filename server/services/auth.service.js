@@ -2,7 +2,13 @@ const crypto = require("crypto");
 
 const ApiError = require("../utils/ApiError");
 const authRepository = require("../repositories/auth.repository");
-const generateToken = require("../helpers/token.helper");
+
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  hashRefreshToken,
+} = require("../helpers/token.helper");
+
 const { sendEmail } = require("../utils/mailer");
 
 // ==============================
@@ -14,6 +20,8 @@ const OTP_EXPIRY_MINUTES = 10;
 const MAX_OTP_ATTEMPTS = 5;
 
 const RESEND_COOLDOWN_SECONDS = 60;
+
+const REFRESH_TOKEN_EXPIRY_DAYS = 7;
 
 const RESET_TOKEN_EXPIRY_MINUTES = 10;
 
@@ -278,11 +286,30 @@ const verifyEmailOtp = async (
   user.emailVerificationLastSentAt =
     undefined;
 
-  await user.save();
+  // ==============================
+  // Create Authentication Session
+  // ==============================
 
-  const token = generateToken(
-    user._id
-  );
+  const accessToken =
+    generateAccessToken(user._id);
+
+  const refreshToken =
+    generateRefreshToken();
+
+  user.refreshTokenHash =
+    hashRefreshToken(refreshToken);
+
+  user.refreshTokenExpires =
+    new Date(
+      Date.now() +
+        REFRESH_TOKEN_EXPIRY_DAYS *
+          24 *
+          60 *
+          60 *
+          1000
+    );
+
+  await user.save();
 
   const userResponse = {
     _id: user._id,
@@ -295,7 +322,8 @@ const verifyEmailOtp = async (
 
   return {
     user: userResponse,
-    token,
+    accessToken,
+    refreshToken,
   };
 };
 
@@ -452,7 +480,7 @@ const loginUser = async (
 ) => {
   const user =
     await authRepository.findUserByEmail(
-      email
+      email.toLowerCase().trim()
     );
 
   if (!user) {
@@ -481,8 +509,38 @@ const loginUser = async (
     );
   }
 
-  const token =
-    generateToken(user._id);
+  // ==============================
+  // Generate Access Token
+  // ==============================
+
+  const accessToken =
+    generateAccessToken(user._id);
+
+  // ==============================
+  // Generate Refresh Token
+  // ==============================
+
+  const refreshToken =
+    generateRefreshToken();
+
+  // ==============================
+  // Store Refresh Token Hash
+  // ==============================
+
+  user.refreshTokenHash =
+    hashRefreshToken(refreshToken);
+
+  user.refreshTokenExpires =
+    new Date(
+      Date.now() +
+        REFRESH_TOKEN_EXPIRY_DAYS *
+          24 *
+          60 *
+          60 *
+          1000
+    );
+
+  await user.save();
 
   const userResponse = {
     _id: user._id,
@@ -495,7 +553,8 @@ const loginUser = async (
 
   return {
     user: userResponse,
-    token,
+    accessToken,
+    refreshToken,
   };
 };
 
@@ -532,8 +591,86 @@ const getCurrentUser = async (
 // Logout
 // ==============================
 
-const logoutUser = () => {
+const logoutUser = async (
+  userId
+) => {
+  const user =
+    await authRepository.findUserByIdWithoutLean(
+      userId
+    );
+
+  if (user) {
+    user.refreshTokenHash = null;
+    user.refreshTokenExpires = null;
+
+    await user.save();
+  }
+
   return true;
+};
+
+// ==============================
+// Refresh Session
+// ==============================
+
+const refreshSession = async (
+  refreshToken
+) => {
+  if (!refreshToken) {
+    throw new ApiError(
+      401,
+      "Refresh token is required"
+    );
+  }
+
+  const refreshTokenHash =
+    hashRefreshToken(refreshToken);
+
+  const user =
+    await authRepository.findUserByRefreshTokenHash(
+      refreshTokenHash
+    );
+
+  if (
+    !user ||
+    !user.refreshTokenExpires ||
+    user.refreshTokenExpires < new Date()
+  ) {
+    throw new ApiError(
+      401,
+      "Invalid or expired refresh token"
+    );
+  }
+
+  // ==============================
+  // Token Rotation
+  // ==============================
+
+  const newAccessToken =
+    generateAccessToken(user._id);
+
+  const newRefreshToken =
+    generateRefreshToken();
+
+  user.refreshTokenHash =
+    hashRefreshToken(newRefreshToken);
+
+  user.refreshTokenExpires =
+    new Date(
+      Date.now() +
+        REFRESH_TOKEN_EXPIRY_DAYS *
+          24 *
+          60 *
+          60 *
+          1000
+    );
+
+  await user.save();
+
+  return {
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
+  };
 };
 
 // ==============================
@@ -950,14 +1087,27 @@ const resetPassword = async (
 
   user.password = newPassword;
 
-  // Clear reset authorization
+  // ==============================
+  // Invalidate Existing Sessions
+  // ==============================
+
+  user.refreshTokenHash = null;
+  user.refreshTokenExpires = null;
+
+  // ==============================
+  // Clear Reset Authorization
+  // ==============================
+
   user.passwordResetTokenHash =
     undefined;
 
   user.passwordResetTokenExpires =
     undefined;
 
+  // ==============================
   // Clear OTP-related fields
+  // ==============================
+
   user.passwordResetOtpHash =
     undefined;
 
@@ -974,9 +1124,14 @@ const resetPassword = async (
   return true;
 };
 
+// ==============================
+// Module Exports
+// ==============================
+
 module.exports = {
   registerUser,
   loginUser,
+  refreshSession,
   getCurrentUser,
   logoutUser,
 

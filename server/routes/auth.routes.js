@@ -64,6 +64,24 @@ router.post(
 );
 
 // ==============================
+// Refresh Access Token
+// ==============================
+
+/**
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh access token using refresh token
+ *     tags:
+ *       - Authentication
+ */
+router.post(
+  "/refresh",
+  authController.refreshToken
+);
+
+
+// ==============================
 // Verify Email OTP
 // ==============================
 

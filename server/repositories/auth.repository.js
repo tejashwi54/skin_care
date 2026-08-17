@@ -39,6 +39,15 @@ const findUserByResetTokenHash = (tokenHash) =>
   }).select("+password");
 
 // ==============================
+// Find User By Refresh Token Hash
+// ==============================
+
+const findUserByRefreshTokenHash = (tokenHash) =>
+  User.findOne({
+    refreshTokenHash: tokenHash,
+  });
+
+// ==============================
 // Export Repository Methods
 // ==============================
 
@@ -48,4 +57,5 @@ module.exports = {
   findUserById,
   findUserByIdWithoutLean,
   findUserByResetTokenHash,
+  findUserByRefreshTokenHash,
 };

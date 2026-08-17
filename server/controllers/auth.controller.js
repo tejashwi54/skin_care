@@ -4,6 +4,7 @@ const authService = require("../services/auth.service");
 
 const {
   cookieOptions,
+  refreshCookieOptions,
   clearCookieOptions,
 } = require("../helpers/cookie.helper");
 
@@ -51,8 +52,13 @@ const login = asyncHandler(
     res
       .cookie(
         "token",
-        result.token,
+        result.accessToken,
         cookieOptions
+      )
+      .cookie(
+        "refreshToken",
+        result.refreshToken,
+        refreshCookieOptions
       )
       .status(200)
       .json(
@@ -62,6 +68,41 @@ const login = asyncHandler(
           {
             user: result.user,
           }
+        )
+      );
+  }
+);
+
+// ==============================
+// Refresh Access Token
+// ==============================
+
+const refreshToken = asyncHandler(
+  async (req, res) => {
+    const currentRefreshToken =
+      req.cookies?.refreshToken;
+
+    const result =
+      await authService.refreshSession(
+        currentRefreshToken
+      );
+
+    res
+      .cookie(
+        "token",
+        result.accessToken,
+        cookieOptions
+      )
+      .cookie(
+        "refreshToken",
+        result.refreshToken,
+        refreshCookieOptions
+      )
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          "Token refreshed successfully"
         )
       );
   }
@@ -87,8 +128,13 @@ const verifyEmail = asyncHandler(
     res
       .cookie(
         "token",
-        result.token,
+        result.accessToken,
         cookieOptions
+      )
+      .cookie(
+        "refreshToken",
+        result.refreshToken,
+        refreshCookieOptions
       )
       .status(200)
       .json(
@@ -137,15 +183,6 @@ const forgotPassword =
       await authService.forgotPassword(
         email
       );
-
-      /*
-       * We intentionally use the same
-       * response whether the email exists
-       * or not.
-       *
-       * This prevents email/account
-       * enumeration.
-       */
 
       res.status(200).json(
         new ApiResponse(
@@ -226,12 +263,22 @@ const resetPassword =
         password
       );
 
-      res.status(200).json(
-        new ApiResponse(
-          200,
-          "Password reset successful"
+      res
+        .clearCookie(
+          "token",
+          clearCookieOptions
         )
-      );
+        .clearCookie(
+          "refreshToken",
+          clearCookieOptions
+        )
+        .status(200)
+        .json(
+          new ApiResponse(
+            200,
+            "Password reset successful. Please login again."
+          )
+        );
     }
   );
 
@@ -262,11 +309,19 @@ const getMe = asyncHandler(
 
 const logout = asyncHandler(
   async (req, res) => {
-    await authService.logoutUser();
+    if (req.user?._id) {
+      await authService.logoutUser(
+        req.user._id
+      );
+    }
 
     res
       .clearCookie(
         "token",
+        clearCookieOptions
+      )
+      .clearCookie(
+        "refreshToken",
         clearCookieOptions
       )
       .status(200)
@@ -282,6 +337,7 @@ const logout = asyncHandler(
 module.exports = {
   register,
   login,
+  refreshToken,
 
   // Email verification
   verifyEmail,
