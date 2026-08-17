@@ -22,8 +22,7 @@ const orderRoutes = require("./routes/order.routes");
 const cartRoutes = require("./routes/cart.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 
-// Test email route
-const testEmailRoutes = require("./routes/testEmail.routes");
+const paymentRoutes = require("./routes/payment.routes");
 
 const app = express();
 
@@ -55,6 +54,11 @@ app.use(
 // ==============================
 
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use(
+  "/api/payments",
+  paymentRoutes
+);
 
 // ==============================
 // Health Check
@@ -95,13 +99,16 @@ app.use(doubleCsrfProtection);
 
 // ==============================
 // Swagger API Documentation
+// Development Only
 // ==============================
 
-app.use(
-  "/api/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec)
-);
+if (process.env.NODE_ENV !== "production") {
+  app.use(
+    "/api/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+  );
+}
 
 // ==============================
 // API Routes
@@ -117,9 +124,14 @@ app.use("/api/cart", cartRoutes);
 
 // ==============================
 // Test Email Route
+// Development Only
 // ==============================
 
-app.use("/api", testEmailRoutes);
+if (process.env.NODE_ENV !== "production") {
+  const testEmailRoutes = require("./routes/testEmail.routes");
+
+  app.use("/api", testEmailRoutes);
+}
 
 // ==============================
 // 404 Handler

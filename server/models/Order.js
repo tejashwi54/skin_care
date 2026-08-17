@@ -56,19 +56,37 @@ const orderSchema = new mongoose.Schema(
       default: "COD",
     },
 
-    itemsPrice: Number,
+    // ==============================
+    // Order Pricing
+    // ==============================
+
+    itemsPrice: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
 
     shippingPrice: {
       type: Number,
       default: 0,
+      min: 0,
     },
 
     discount: {
       type: Number,
       default: 0,
+      min: 0,
     },
 
-    totalPrice: Number,
+    totalPrice: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
+    // ==============================
+    // Order Status
+    // ==============================
 
     orderStatus: {
       type: String,
@@ -89,6 +107,25 @@ const orderSchema = new mongoose.Schema(
 
     paidAt: Date,
 
+    // ==============================
+    // Razorpay Payment Details
+    // ==============================
+
+    razorpayOrderId: {
+      type: String,
+      default: null,
+    },
+
+    razorpayPaymentId: {
+      type: String,
+      default: null,
+    },
+
+    razorpaySignature: {
+      type: String,
+      default: null,
+    },
+
     deliveredAt: Date,
   },
   {
@@ -96,8 +133,26 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-orderSchema.index({ user: 1, createdAt: -1 });
-orderSchema.index({ createdAt: -1 });
+// ==============================
+// Database Indexes
+// ==============================
+
+orderSchema.index({
+  user: 1,
+  createdAt: -1,
+});
+
+orderSchema.index({
+  createdAt: -1,
+});
+
+orderSchema.index({
+  razorpayOrderId: 1,
+});
+
+orderSchema.index({
+  razorpayPaymentId: 1,
+});
 
 module.exports = mongoose.model(
   "Order",
