@@ -284,3 +284,14 @@
 [2026-08-18 14:12:22] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
 [2026-08-18 14:12:30] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
 [2026-08-18 14:12:30] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 14:57:45] INFO: Server running on http://localhost:5000
+[2026-08-18 14:57:46] INFO: ✅ MongoDB Connected: 127.0.0.1
+[2026-08-18 14:57:46] INFO: Redis connecting...
+[2026-08-18 14:57:46] INFO: Redis connected and ready
+[2026-08-18 14:58:46] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 14:58:46] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 14:58:47] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:01:48] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:01:48] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:01:55] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:01:55] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}

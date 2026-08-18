@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaHeart, FaEye, FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { FaHeart, FaEye, FaStar } from "react-icons/fa";
 
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
@@ -12,46 +12,30 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
-  const [openQuickView, setOpenQuickView] = useState(false);
+  const [quickOpen, setQuickOpen] = useState(false);
 
   const productId = getId(product);
-
-  const productImage =
-    product.image ||
-    product.images?.[0]?.url ||
-    "/images/placeholder.jpg";
-
-  const productBadge =
-    product.badge ||
-    (product.featured ? "Featured" : "New");
-
-  const productRating = product.rating || 0;
-
-  const productReviews =
-    product.reviews || product.numReviews || 0;
-
-  const productOldPrice =
-    product.oldPrice || product.price;
-
-  const productStock =
-    product.stock > 0 || product.stock === "In Stock"
-      ? "In Stock"
-      : "Out of Stock";
-
   const liked = isInWishlist(product);
 
   const handleAddToCart = () => {
     addToCart(product);
-    toast.success(`${product.name} added to cart 🛒`);
+
+    toast.success(`${product.name} added to cart 🛒`, {
+      id: "cart-toast",
+    });
   };
 
   const handleWishlist = () => {
     toggleWishlist(product);
 
     if (liked) {
-      toast("Removed from Wishlist");
+      toast("Removed from Wishlist", {
+        id: "wishlist-toast",
+      });
     } else {
-      toast.success("Added to Wishlist ❤️");
+      toast.success("Added to Wishlist ❤️", {
+        id: "wishlist-toast",
+      });
     }
   };
 
@@ -59,42 +43,52 @@ const ProductCard = ({ product }) => {
     <>
       <div className="group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col">
 
+        {/* Image */}
         <div className="relative overflow-hidden">
 
+          {/* Badge */}
           <span className="absolute top-4 left-4 z-20 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-            {productBadge}
+            {product.badge}
           </span>
 
+          {/* Wishlist */}
           <button
             type="button"
-            onClick={handleWishlist}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleWishlist();
+            }}
             className="absolute top-4 right-4 z-20 bg-white p-3 rounded-full shadow hover:scale-110 transition"
           >
             <FaHeart
-              className={`text-lg ${
+              className={`text-lg transition ${
                 liked ? "text-red-500" : "text-gray-400"
               }`}
             />
           </button>
 
-          <button
-            type="button"
-            onClick={() => setOpenQuickView(true)}
-            className="absolute bottom-4 right-4 z-20 bg-white p-3 rounded-full shadow opacity-0 group-hover:opacity-100 hover:bg-green-500 hover:text-white transition"
-          >
-            <FaEye />
-          </button>
-
+          {/* Product Image */}
           <Link to={`/product/${productId}`}>
             <img
-              src={productImage}
+              src={product.image}
               alt={product.name}
               className="w-full h-72 object-cover group-hover:scale-110 transition duration-500"
             />
           </Link>
 
+          {/* Quick View */}
+          <button
+            type="button"
+            onClick={() => setQuickOpen(true)}
+            className="absolute bottom-4 right-4 z-20 bg-white p-3 rounded-full shadow opacity-0 group-hover:opacity-100 hover:bg-green-500 hover:text-white transition"
+          >
+            <FaEye />
+          </button>
+
         </div>
 
+        {/* Content */}
         <Link
           to={`/product/${productId}`}
           className="flex-1 flex flex-col"
@@ -112,10 +106,12 @@ const ProductCard = ({ product }) => {
             <div className="mt-3 flex items-center gap-2">
               <FaStar className="text-yellow-400" />
 
-              <span>{productRating}</span>
+              <span className="font-semibold">
+                {product.rating}
+              </span>
 
               <span className="text-gray-400">
-                ({productReviews})
+                ({product.reviews})
               </span>
             </div>
 
@@ -126,23 +122,24 @@ const ProductCard = ({ product }) => {
               </span>
 
               <span className="line-through text-gray-400">
-                ₹{productOldPrice}
+                ₹{product.oldPrice}
               </span>
 
             </div>
 
-            <p className="mt-3 text-sm text-green-600">
-              {productStock}
+            <p className="mt-3 text-sm text-green-600 font-medium">
+              {product.stock}
             </p>
 
           </div>
         </Link>
 
+        {/* Add To Cart */}
         <div className="px-6 pb-6">
 
           <button
             onClick={handleAddToCart}
-            className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-full font-semibold transition"
+            className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-full font-semibold transition duration-300"
           >
             Add To Cart
           </button>
@@ -151,10 +148,11 @@ const ProductCard = ({ product }) => {
 
       </div>
 
+      {/* Quick View */}
       <QuickViewModal
         product={product}
-        isOpen={openQuickView}
-        onClose={() => setOpenQuickView(false)}
+        isOpen={quickOpen}
+        onClose={() => setQuickOpen(false)}
       />
     </>
   );

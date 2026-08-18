@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
 const ShopSidebar = ({
@@ -6,6 +7,8 @@ const ShopSidebar = ({
   category,
   setCategory,
 }) => {
+  const [maxPrice, setMaxPrice] = useState(2500);
+
   return (
     <div className="bg-white rounded-[32px] shadow-lg p-8 sticky top-28 border border-gray-100">
 
@@ -35,7 +38,6 @@ const ShopSidebar = ({
         </h3>
 
         <div className="space-y-3">
-
           {[
             "All",
             "Face Mask",
@@ -59,7 +61,6 @@ const ShopSidebar = ({
               {item === "All" ? "All Products" : item}
             </button>
           ))}
-
         </div>
       </div>
 
@@ -71,7 +72,7 @@ const ShopSidebar = ({
           </h3>
 
           <span className="font-semibold text-green-600">
-            ₹2500
+            ₹{maxPrice}
           </span>
         </div>
 
@@ -79,55 +80,49 @@ const ShopSidebar = ({
           type="range"
           min="0"
           max="2500"
-          defaultValue="2500"
+          value={maxPrice}
+          onChange={(e) =>
+            setMaxPrice(Number(e.target.value))
+          }
           className="w-full accent-green-500"
         />
       </div>
 
       {/* Rating */}
-      <div className="mt-10">
+      <div className="mt-7">
         <h3 className="uppercase text-sm tracking-[3px] font-semibold text-gray-500 mb-5">
           Rating
         </h3>
 
-        <div className="space-y-3">
-
-          <label className="flex items-center gap-3 cursor-pointer">
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 cursor-pointer text-sm">
             <input type="checkbox" />
-            ⭐⭐⭐⭐⭐
+            ☆
           </label>
 
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="flex items-center gap-2 cursor-pointer text-sm">
             <input type="checkbox" />
-            ⭐⭐⭐⭐☆
+            ☆☆
           </label>
-
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" />
-            ⭐⭐⭐☆☆
-          </label>
-
         </div>
       </div>
 
       {/* Availability */}
-      <div className="mt-10">
+      <div className="mt-7">
         <h3 className="uppercase text-sm tracking-[3px] font-semibold text-gray-500 mb-5">
           Availability
         </h3>
 
-        <div className="space-y-3">
-
-          <label className="flex items-center gap-3 cursor-pointer">
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 cursor-pointer text-sm">
             <input type="checkbox" />
             In Stock
           </label>
 
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="flex items-center gap-2 cursor-pointer text-sm">
             <input type="checkbox" />
             Out of Stock
           </label>
-
         </div>
       </div>
 
@@ -136,8 +131,9 @@ const ShopSidebar = ({
         onClick={() => {
           setSearch("");
           setCategory("All");
+          setMaxPrice(2500);
         }}
-        className="mt-10 w-full border border-green-500 text-green-600 py-3 rounded-full hover:bg-green-500 hover:text-white transition"
+        className="mt-7 w-full border border-green-500 text-green-600 py-2.5 rounded-full text-sm font-medium hover:bg-green-500 hover:text-white transition"
       >
         Clear Filters
       </button>
