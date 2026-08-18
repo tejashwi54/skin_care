@@ -42,8 +42,9 @@ const VerifyResetOtpForm = () => {
   const [resending, setResending] =
     useState(false);
 
+  // Initial cooldown should be 0
   const [cooldown, setCooldown] =
-    useState(RESEND_COOLDOWN);
+    useState(0);
 
   const inputRefs = useRef([]);
 

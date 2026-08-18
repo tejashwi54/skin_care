@@ -295,3 +295,98 @@
 [2026-08-18 15:01:48] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
 [2026-08-18 15:01:55] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
 [2026-08-18 15:01:55] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:13:36] INFO: Server running on http://localhost:5000
+[2026-08-18 15:13:36] INFO: Redis connecting...
+[2026-08-18 15:13:36] INFO: ✅ MongoDB Connected: 127.0.0.1
+[2026-08-18 15:13:36] INFO: Redis connected and ready
+[2026-08-18 15:14:01] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:14:04] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:14:04] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:14:18] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:14:19] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:14:32] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 15:14:33] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:14:33] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 15:14:39] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":2,"limit":4,"sort":"-createdAt"}
+[2026-08-18 15:14:39] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":2,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:14:51] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:14:52] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:49:54] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:49:56] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:49:56] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:49:56] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:49:56] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:49:56] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:49:57] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:50:02] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:50:02] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:55:54] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:55:54] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:55:54] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:57:54] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 15:57:54] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 15:57:55] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 15:57:55] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 15:58:15] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 15:58:16] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:02:39] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:02:41] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:02:41] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:02:59] INFO: Redis cache MISS: products:{"search":"","category":"Sunscreen","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:03:00] INFO: Redis cache SET: products:{"search":"","category":"Sunscreen","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:03:00] INFO: Redis cache HIT: products:{"search":"","category":"Sunscreen","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:03:18] INFO: Redis cache MISS: products:{"search":"","category":"Moisturizers","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:03:19] INFO: Redis cache SET: products:{"search":"","category":"Moisturizers","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:03:22] INFO: Redis cache HIT: products:{"search":"","category":"Sunscreen","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:03:24] INFO: Redis cache MISS: products:{"search":"","category":"Cleanser","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:03:25] INFO: Redis cache SET: products:{"search":"","category":"Cleanser","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:04:42] INFO: Redis cache HIT: products:{"search":"","category":"Cleanser","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:04:42] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:04:43] INFO: Redis cache HIT: products:{"search":"","category":"Cleanser","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:04:43] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:04:43] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:04:43] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:04:46] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:04:46] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:09:01] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:09:01] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:09:02] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:09:09] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:09:10] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:09:16] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 16:09:17] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:09:17] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 16:09:17] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 16:09:22] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:09:22] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:09:27] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:09:27] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:06] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:07] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:19:07] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:35] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:35] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:36] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:19:36] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:19:37] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:19:38] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:38] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:40] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:40] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:19:48] INFO: Redis cache MISS: products:{"search":"s","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 16:19:48] INFO: Redis cache MISS: products:{"search":"se","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 16:19:48] INFO: Redis cache MISS: products:{"search":"ser","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"}
+[2026-08-18 16:19:49] INFO: Redis cache SET: products:{"search":"s","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:19:49] INFO: Redis cache SET: products:{"search":"se","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:19:49] INFO: Redis cache SET: products:{"search":"ser","category":"","minPrice":"","maxPrice":"","page":1,"limit":8,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:20:04] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:20:04] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:24:07] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:24:07] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":50,"sort":"-createdAt"}
+[2026-08-18 16:24:14] INFO: Redis cache MISS: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:24:14] INFO: Redis cache SET: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"} | TTL: 300s
+[2026-08-18 16:24:15] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:24:16] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:24:16] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:27:07] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
+[2026-08-18 16:27:07] INFO: Redis cache HIT: products:{"search":"","category":"","minPrice":"","maxPrice":"","page":1,"limit":4,"sort":"-createdAt"}
