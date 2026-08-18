@@ -1,0 +1,2 @@
+[2026-08-18 13:55:16] ERROR: Redis Client Error: read ECONNRESET
+[2026-08-18 13:55:43] ERROR: Redis Client Error: Connection timeout

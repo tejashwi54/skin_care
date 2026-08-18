@@ -125,6 +125,26 @@ const updateOrderStatus = asyncHandler(
         req.body.status
       );
 
+    // ==============================
+    // Real-Time Order Tracking
+    // ==============================
+
+    const io = req.app.get("io");
+
+    if (io) {
+      const room = `order:${order._id}`;
+
+      io.to(room).emit(
+        "order-status-updated",
+        {
+          orderId: order._id,
+          status: order.orderStatus,
+          deliveredAt: order.deliveredAt || null,
+          updatedAt: order.updatedAt,
+        }
+      );
+    }
+
     res.status(200).json(
       new ApiResponse(
         200,

@@ -10,6 +10,10 @@ const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ==============================
+  // Load All Orders
+  // ==============================
+
   const loadOrders = async () => {
     try {
       setLoading(true);
@@ -18,35 +22,70 @@ const AdminOrders = () => {
 
       console.log("ADMIN ORDERS RESPONSE:", response);
 
-      setOrders(response.data || []);
+      // Backend returns:
+      // response.data = {
+      //   orders: [],
+      //   currentPage: 1,
+      //   totalPages: ...,
+      //   totalItems: ...
+      // }
+
+      setOrders(response.data?.orders || []);
     } catch (error) {
-      console.error("Failed to load orders:", error);
+      console.error(
+        "Failed to load orders:",
+        error
+      );
+
       toast.error("Failed to load orders");
     } finally {
       setLoading(false);
     }
   };
 
+  // ==============================
+  // Initial Load
+  // ==============================
+
   useEffect(() => {
     loadOrders();
   }, []);
 
-  const handleStatusChange = async (orderId, status) => {
+  // ==============================
+  // Update Order Status
+  // ==============================
+
+  const handleStatusChange = async (
+    orderId,
+    status
+  ) => {
     try {
-      await updateOrderStatus(orderId, status);
+      await updateOrderStatus(
+        orderId,
+        status
+      );
 
-      toast.success("Order status updated");
+      toast.success(
+        "Order status updated"
+      );
 
-      loadOrders();
+      // Refresh admin order list
+      await loadOrders();
     } catch (error) {
       console.error(
         "Failed to update order status:",
         error
       );
 
-      toast.error("Failed to update order status");
+      toast.error(
+        "Failed to update order status"
+      );
     }
   };
+
+  // ==============================
+  // Loading State
+  // ==============================
 
   if (loading) {
     return (
@@ -61,6 +100,10 @@ const AdminOrders = () => {
       </div>
     );
   }
+
+  // ==============================
+  // Orders UI
+  // ==============================
 
   return (
     <div className="bg-white rounded-3xl shadow-sm p-8">
@@ -85,7 +128,10 @@ const AdminOrders = () => {
               key={order._id}
               className="border rounded-2xl p-6"
             >
+              {/* ============================== */}
               {/* Order Header */}
+              {/* ============================== */}
+
               <div className="flex flex-col md:flex-row md:justify-between gap-4">
                 <div>
                   <h3 className="font-bold text-lg">
@@ -93,15 +139,21 @@ const AdminOrders = () => {
                   </h3>
 
                   <p className="text-gray-500 mt-1">
-                    Customer: {order.user?.name}
+                    Customer:{" "}
+                    {order.user?.name ||
+                      "N/A"}
                   </p>
 
                   <p className="text-gray-500">
-                    {order.user?.email}
+                    {order.user?.email ||
+                      "N/A"}
                   </p>
                 </div>
 
+                {/* ============================== */}
                 {/* Status */}
+                {/* ============================== */}
+
                 <div>
                   <label className="block text-sm text-gray-500 mb-2">
                     Order Status
@@ -140,31 +192,45 @@ const AdminOrders = () => {
                 </div>
               </div>
 
+              {/* ============================== */}
               {/* Products */}
+              {/* ============================== */}
+
               <div className="mt-6">
                 <h4 className="font-semibold mb-3">
                   Products
                 </h4>
 
                 <div className="space-y-2">
-                  {order.orderItems?.map((item) => (
-                    <div
-                      key={item._id || item.product}
-                      className="flex justify-between border-b py-2"
-                    >
-                      <span>
-                        {item.name} × {item.quantity}
-                      </span>
+                  {order.orderItems?.map(
+                    (item) => (
+                      <div
+                        key={
+                          item._id ||
+                          item.product
+                        }
+                        className="flex justify-between border-b py-2"
+                      >
+                        <span>
+                          {item.name} ×{" "}
+                          {item.quantity}
+                        </span>
 
-                      <span>
-                        ₹{item.price * item.quantity}
-                      </span>
-                    </div>
-                  ))}
+                        <span>
+                          ₹
+                          {item.price *
+                            item.quantity}
+                        </span>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
 
+              {/* ============================== */}
               {/* Total */}
+              {/* ============================== */}
+
               <div className="border-t mt-5 pt-5 flex justify-between text-lg font-bold">
                 <span>Total</span>
 

@@ -1,9 +1,20 @@
 const ApiError = require("../utils/ApiError");
 const productRepository = require("../repositories/product.repository");
 
+const {
+  PRODUCT_CACHE_PREFIX,
+  getCache,
+  setCache,
+  invalidateProductCache,
+} = require("../utils/cache");
+
 const MAX_PRODUCT_LIMIT = 50;
 
-const parsePositiveInteger = (value, fallback, maximum) => {
+const parsePositiveInteger = (
+  value,
+  fallback,
+  maximum
+) => {
   const parsed = Number(value);
 
   if (!Number.isInteger(parsed) || parsed < 1) {
@@ -13,16 +24,33 @@ const parsePositiveInteger = (value, fallback, maximum) => {
   return Math.min(parsed, maximum);
 };
 
+// ==============================
 // Create Product
+// ==============================
+
 const createProduct = async (data) => {
-  return await productRepository.createProduct(data);
+  const product =
+    await productRepository.createProduct(data);
+
+  // Clear cached product listings
+  await invalidateProductCache();
+
+  return product;
 };
 
-// Get All Products (Search + Filter + Pagination + Sorting)
+// ==============================
+// Get All Products
+// Search + Filter + Pagination
+// + Sorting + Redis Cache
+// ==============================
+
 const getAllProducts = async (query = {}) => {
   const filter = {};
 
-  // Search by Name, Category, Description
+  // ==============================
+  // Search
+  // ==============================
+
   if (query.search) {
     filter.$or = [
       {
@@ -46,7 +74,10 @@ const getAllProducts = async (query = {}) => {
     ];
   }
 
+  // ==============================
   // Category Filter
+  // ==============================
+
   if (query.category) {
     filter.category = {
       $regex: query.category,
@@ -54,79 +85,199 @@ const getAllProducts = async (query = {}) => {
     };
   }
 
+  // ==============================
   // Price Filter
+  // ==============================
+
   if (query.minPrice || query.maxPrice) {
     filter.price = {};
 
     if (query.minPrice) {
-      filter.price.$gte = Number(query.minPrice);
+      filter.price.$gte = Number(
+        query.minPrice
+      );
     }
 
     if (query.maxPrice) {
-      filter.price.$lte = Number(query.maxPrice);
+      filter.price.$lte = Number(
+        query.maxPrice
+      );
     }
   }
 
+  // ==============================
   // Pagination
-  const page = parsePositiveInteger(query.page, 1, Number.MAX_SAFE_INTEGER);
-  const limit = parsePositiveInteger(query.limit, 8, MAX_PRODUCT_LIMIT);
+  // ==============================
+
+  const page = parsePositiveInteger(
+    query.page,
+    1,
+    Number.MAX_SAFE_INTEGER
+  );
+
+  const limit = parsePositiveInteger(
+    query.limit,
+    8,
+    MAX_PRODUCT_LIMIT
+  );
+
   const skip = (page - 1) * limit;
 
+  // ==============================
   // Sorting
-  const sort = query.sort || "-createdAt";
+  // ==============================
 
-  // Fetch Products
-  const [products, totalItems] = await Promise.all([
-    productRepository.getProducts(filter, {
-      sort,
-      skip,
+  const sort =
+    query.sort || "-createdAt";
+
+  // ==============================
+  // Redis Cache Key
+  // ==============================
+
+  const cacheKey =
+    `${PRODUCT_CACHE_PREFIX}${JSON.stringify({
+      search: query.search || "",
+      category: query.category || "",
+      minPrice: query.minPrice || "",
+      maxPrice: query.maxPrice || "",
+      page,
       limit,
-    }),
-    productRepository.countProducts(filter),
+      sort,
+    })}`;
+
+  // ==============================
+  // Check Redis Cache
+  // ==============================
+
+  const cachedResult =
+    await getCache(cacheKey);
+
+  if (cachedResult) {
+    return JSON.parse(cachedResult);
+  }
+
+  // ==============================
+  // Fetch From MongoDB
+  // ==============================
+
+  const [
+    products,
+    totalItems,
+  ] = await Promise.all([
+    productRepository.getProducts(
+      filter,
+      {
+        sort,
+        skip,
+        limit,
+      }
+    ),
+
+    productRepository.countProducts(
+      filter
+    ),
   ]);
 
-  return {
+  // ==============================
+  // Prepare Result
+  // ==============================
+
+  const result = {
     products,
     currentPage: page,
-    totalPages: Math.ceil(totalItems / limit),
+    totalPages: Math.ceil(
+      totalItems / limit
+    ),
     totalItems,
     totalProducts: totalItems,
     limit,
   };
+
+  // ==============================
+  // Save Result In Redis
+  // TTL = 5 Minutes
+  // ==============================
+
+  await setCache(
+    cacheKey,
+    result,
+    300
+  );
+
+  return result;
 };
 
+// ==============================
 // Get Single Product
+// ==============================
+
 const getProductById = async (id) => {
-  const product = await productRepository.getProductById(id);
+  const product =
+    await productRepository.getProductById(id);
 
   if (!product) {
-    throw new ApiError(404, "Product not found");
+    throw new ApiError(
+      404,
+      "Product not found"
+    );
   }
 
   return product;
 };
 
+// ==============================
 // Update Product
-const updateProduct = async (id, data) => {
-  const product = await productRepository.updateProduct(id, data);
+// ==============================
+
+const updateProduct = async (
+  id,
+  data
+) => {
+  const product =
+    await productRepository.updateProduct(
+      id,
+      data
+    );
 
   if (!product) {
-    throw new ApiError(404, "Product not found");
+    throw new ApiError(
+      404,
+      "Product not found"
+    );
   }
+
+  // Clear cached product listings
+  await invalidateProductCache();
 
   return product;
 };
 
+// ==============================
 // Delete Product
+// ==============================
+
 const deleteProduct = async (id) => {
-  const product = await productRepository.deleteProduct(id);
+  const product =
+    await productRepository.deleteProduct(
+      id
+    );
 
   if (!product) {
-    throw new ApiError(404, "Product not found");
+    throw new ApiError(
+      404,
+      "Product not found"
+    );
   }
+
+  // Clear cached product listings
+  await invalidateProductCache();
 
   return product;
 };
+
+// ==============================
+// Exports
+// ==============================
 
 module.exports = {
   createProduct,
